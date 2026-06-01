@@ -4,7 +4,7 @@ import SoldierOnboarding from '@/components/soldier/SoldierOnboarding'
 export default function SoldierPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#e6f7f1] to-gray-50">
-      <div className="max-w-2xl mx-auto px-4 py-10">
+      <div className="max-w-[480px] mx-auto px-4 py-10">
         <Link
           href="/"
           className="inline-flex items-center gap-2 text-sm text-[#1D9E75] hover:text-[#178a63] mb-8 transition-colors"
