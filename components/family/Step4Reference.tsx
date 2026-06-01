@@ -1,0 +1,128 @@
+'use client'
+
+import { useState } from 'react'
+import type { FamilyFormData } from '@/types'
+
+type Props = {
+  data: FamilyFormData
+  onChange: (updates: Partial<FamilyFormData>) => void
+  onSubmit: () => void
+  onBack: () => void
+  loading: boolean
+  error: string
+}
+
+const inp = (err?: string) =>
+  `w-full border rounded-xl px-3.5 py-2.5 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#534AB7] focus:border-transparent transition text-sm ${
+    err ? 'border-red-400 bg-red-50' : 'border-gray-200'
+  }`
+
+export default function Step4Reference({ data, onChange, onSubmit, onBack, loading, error }: Props) {
+  const [errors, setErrors] = useState<Record<string, string>>({})
+
+  const validate = () => {
+    const e: Record<string, string> = {}
+    if (!data.referenceName.trim()) e.referenceName = 'Required'
+    if (!data.referencePhone.trim()) e.referencePhone = 'Required'
+    if (!data.agreedToTerms) e.terms = 'Please agree to continue'
+    setErrors(e)
+    return Object.keys(e).length === 0
+  }
+
+  return (
+    <div>
+      <h2 className="text-xl font-bold text-gray-800 mb-1">One last thing — a reference</h2>
+      <p className="text-gray-400 text-sm mb-7">
+        We may reach out to your reference to confirm your application. This helps us keep our
+        soldiers safe.
+      </p>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">Reference Full Name *</label>
+        <input
+          type="text"
+          value={data.referenceName}
+          onChange={e => onChange({ referenceName: e.target.value })}
+          className={inp(errors.referenceName)}
+          placeholder="Miriam Cohen"
+        />
+        {errors.referenceName && <p className="text-red-500 text-xs mt-1">{errors.referenceName}</p>}
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">Reference Phone *</label>
+        <input
+          type="tel"
+          value={data.referencePhone}
+          onChange={e => onChange({ referencePhone: e.target.value })}
+          className={inp(errors.referencePhone)}
+          placeholder="+972 50 000 0000"
+        />
+        {errors.referencePhone && <p className="text-red-500 text-xs mt-1">{errors.referencePhone}</p>}
+      </div>
+
+      <div className="mb-8">
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">Relationship to Your Family</label>
+        <input
+          type="text"
+          value={data.referenceRelationship}
+          onChange={e => onChange({ referenceRelationship: e.target.value })}
+          className={inp()}
+          placeholder="Rabbi, neighbor, community leader..."
+        />
+      </div>
+
+      <label className={`flex items-start gap-3 p-4 rounded-xl border cursor-pointer mb-8 ${
+        errors.terms ? 'border-red-400 bg-red-50' : data.agreedToTerms ? 'border-[#534AB7] bg-[#eeedf8]' : 'border-gray-200'
+      }`}>
+        <input
+          type="checkbox"
+          checked={data.agreedToTerms}
+          onChange={e => onChange({ agreedToTerms: e.target.checked })}
+          className="w-4 h-4 mt-0.5 accent-[#534AB7]"
+        />
+        <span className="text-sm text-gray-600 leading-relaxed">
+          I understand that the team may contact my reference to verify my application, and I give
+          permission to do so. I confirm that the information I&apos;ve provided is accurate.
+        </span>
+      </label>
+      {errors.terms && <p className="text-red-500 text-xs -mt-6 mb-6">{errors.terms}</p>}
+
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-sm text-red-600">
+          {error}
+        </div>
+      )}
+
+      <div className="flex justify-between">
+        <button
+          onClick={onBack}
+          disabled={loading}
+          className="text-gray-400 px-6 py-2.5 rounded-full text-sm font-semibold hover:text-gray-600 transition-colors flex items-center gap-2 disabled:opacity-50"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+          Back
+        </button>
+        <button
+          onClick={() => { if (validate()) onSubmit() }}
+          disabled={loading}
+          className="bg-[#534AB7] text-white px-8 py-2.5 rounded-full text-sm font-semibold hover:bg-[#4339a0] transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
+        >
+          {loading ? (
+            <>
+              <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              </svg>
+              Submitting...
+            </>
+          ) : (
+            'Submit Application'
+          )}
+        </button>
+      </div>
+    </div>
+  )
+}
