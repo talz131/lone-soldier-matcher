@@ -64,14 +64,10 @@ export default function AdminDashboard() {
             <Image src="/logo.png" alt="Logo" width={32} height={32} className="rounded-full" />
             <span style={{ fontWeight: 600, color: 'white', fontSize: 14 }}>Lone Soldier Matcher</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)' }}>Dashboard</span>
-            <span style={{ color: 'rgba(255,255,255,0.2)' }}>·</span>
-            <button onClick={handleLogout} style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', background: 'none', border: 'none', cursor: 'pointer' }}
-              className="hover:text-white transition-colors">
-              Sign out
-            </button>
-          </div>
+          <button onClick={handleLogout} style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', background: 'none', border: 'none', cursor: 'pointer' }}
+            className="hover:text-white transition-colors">
+            Sign out
+          </button>
         </div>
       </header>
       <hr className="gold-rule" />
