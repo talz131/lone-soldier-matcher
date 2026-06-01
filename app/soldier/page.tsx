@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import SoldierOnboarding from '@/components/soldier/SoldierOnboarding'
 
 export default function SoldierPage() {
@@ -16,7 +17,7 @@ export default function SoldierPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
           </Link>
-          <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#1D9E75] to-[#534AB7] shrink-0" />
+          <Image src="/logo.png" alt="Logo" width={36} height={36} className="rounded-full shrink-0" />
           <span className="text-white text-sm font-semibold">Lone Soldier Matcher</span>
         </div>
       </nav>

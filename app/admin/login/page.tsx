@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase-client'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('')
@@ -43,11 +44,7 @@ export default function AdminLogin() {
       <div className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-sm">
           <div className="text-center mb-8">
-            <div className="w-12 h-12 rounded-2xl bg-[#0F3D2E] mx-auto mb-4 flex items-center justify-center">
-              <svg className="w-6 h-6 text-[#EF9F27]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-            </div>
+            <Image src="/logo.png" alt="Lone Soldier Matcher" width={80} height={80} className="rounded-full mx-auto mb-4 shadow-md" />
             <h1 className="font-serif text-2xl text-[#0B2818]">Admin Access</h1>
             <p className="text-[#888] text-sm mt-1">Lone Soldier Matcher</p>
           </div>

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function Home() {
   return (
@@ -7,7 +8,7 @@ export default function Home() {
 
         {/* Hero */}
         <section className="flex-1 flex flex-col items-center justify-center text-center pt-16 pb-6">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#1D9E75] to-[#534AB7] mb-6 shadow-md" />
+          <Image src="/logo.png" alt="Lone Soldier Matcher" width={100} height={100} className="rounded-full mb-6 shadow-md" priority />
 
           <div className="inline-flex items-center gap-1.5 bg-amber-50 text-amber-700 text-xs font-medium px-3 py-1 rounded-full mb-6 border border-amber-200">
             🇮🇱 Connecting Hearts Across Israel

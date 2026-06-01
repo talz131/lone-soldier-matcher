@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase-client'
+import Image from 'next/image'
 import PendingTab from './PendingTab'
 import FamiliesTab from './FamiliesTab'
 import MatchesTab from './MatchesTab'
@@ -59,7 +60,7 @@ export default function AdminDashboard() {
       <header className="bg-[#0F3D2E]">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#1D9E75] to-[#534AB7]" />
+            <Image src="/logo.png" alt="Logo" width={36} height={36} className="rounded-full" />
             <span className="font-semibold text-white">Lone Soldier Matcher</span>
             <span className="text-white/30">·</span>
             <span className="text-sm text-white/50">Admin Dashboard</span>
