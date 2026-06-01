@@ -32,6 +32,7 @@ CREATE TABLE soldiers (
 
   -- Step 4: Verification
   military_id_url TEXT,
+  reference_phone TEXT,
 
   -- Admin
   status          TEXT DEFAULT 'pending' CHECK (status IN ('pending','approved','declined','matched')),

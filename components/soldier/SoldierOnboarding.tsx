@@ -27,6 +27,7 @@ const DEFAULT: SoldierFormData = {
   petsOk: true,
   hasDietaryRestrictions: false,
   dietaryDetails: '',
+  referencePhone: '',
   militaryIdFile: null,
 }
 
@@ -78,6 +79,7 @@ export default function SoldierOnboarding() {
         has_dietary_restrictions: data.hasDietaryRestrictions,
         dietary_details: data.dietaryDetails || null,
         military_id_url: militaryIdUrl,
+        reference_phone: data.referencePhone || null,
       })
 
       if (dbError) throw dbError

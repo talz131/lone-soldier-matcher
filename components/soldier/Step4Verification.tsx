@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import type { SoldierFormData } from '@/types'
 
 type Props = {
@@ -14,6 +14,16 @@ type Props = {
 
 export default function Step4Verification({ data, onChange, onSubmit, onBack, loading, error }: Props) {
   const fileRef = useRef<HTMLInputElement>(null)
+  const [referencePhoneError, setReferencePhoneError] = useState('')
+
+  const handleSubmit = () => {
+    if (!data.referencePhone.trim()) {
+      setReferencePhoneError('Reference contact number is required')
+      return
+    }
+    setReferencePhoneError('')
+    onSubmit()
+  }
 
   return (
     <div>
@@ -56,9 +66,23 @@ export default function Step4Verification({ data, onChange, onSubmit, onBack, lo
         )}
       </div>
 
-      <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-8 text-sm text-amber-700">
+      <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6 text-sm text-amber-700">
         <strong>Privacy note:</strong> Your military ID is used only for verification and is never shared
         with host families. It is stored securely and accessible only to our admin team.
+      </div>
+
+      <div className="mb-8">
+        <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+          Reference contact number <span className="text-red-500">*</span>
+        </label>
+        <input
+          type="tel"
+          value={data.referencePhone}
+          onChange={e => { onChange({ referencePhone: e.target.value }); setReferencePhoneError('') }}
+          placeholder="+972 50 000 0000"
+          className={`w-full border rounded-xl px-4 py-2.5 text-sm outline-none transition-colors ${referencePhoneError ? 'border-red-400 focus:border-red-500' : 'border-gray-200 focus:border-[#1D9E75]'}`}
+        />
+        {referencePhoneError && <p className="text-red-500 text-xs mt-1">{referencePhoneError}</p>}
       </div>
 
       {error && (
@@ -79,7 +103,7 @@ export default function Step4Verification({ data, onChange, onSubmit, onBack, lo
           Back
         </button>
         <button
-          onClick={onSubmit}
+          onClick={handleSubmit}
           disabled={loading}
           className="bg-[#1D9E75] text-white px-8 py-2.5 rounded-full text-sm font-semibold hover:bg-[#178a63] transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
         >
