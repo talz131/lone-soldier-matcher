@@ -20,4 +20,9 @@
   .font-serif {
     font-family: Georgia, 'Times New Roman', serif;
   }
+  .page-shell {
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }

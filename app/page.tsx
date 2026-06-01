@@ -4,7 +4,7 @@ import Image from 'next/image'
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#F9F6F0]">
-      <div className="max-w-[480px] mx-auto px-6 flex flex-col min-h-screen">
+      <div className="page-shell px-6 flex flex-col min-h-screen">
 
         {/* Hero */}
         <section className="flex-1 flex flex-col items-center justify-center text-center pt-16 pb-6">
