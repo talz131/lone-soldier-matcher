@@ -18,14 +18,6 @@ export default function StepIndicator({ currentStep, totalSteps, steps, color }:
           className="absolute left-0 top-4 h-0.5 transition-all duration-500"
           style={{ backgroundColor: color, width: `${progress}%` }}
         />
-        {/* Gold accent dot at progress point */}
-        {progress > 0 && progress < 100 && (
-          <div
-            className="absolute top-[11px] w-2.5 h-2.5 rounded-full border-2 border-[#EF9F27] bg-white z-20 transition-all duration-500"
-            style={{ left: `calc(${progress}% - 5px)` }}
-          />
-        )}
-
         {steps.map((step, index) => {
           const n = index + 1
           const done = n < currentStep

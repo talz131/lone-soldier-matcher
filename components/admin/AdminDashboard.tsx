@@ -56,14 +56,14 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-[#F9F6F0]">
-      {/* Nav */}
-      <header className="bg-[#0F3D2E]">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      {/* Nav — full width */}
+      <header className="bg-[#0F3D2E] w-full">
+        <div className="px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Image src="/logo.png" alt="Logo" width={36} height={36} className="rounded-full" />
             <span className="font-semibold text-white">Lone Soldier Matcher</span>
-            <span className="text-white/30">·</span>
-            <span className="text-sm text-white/50">Admin Dashboard</span>
+            <span className="text-white/30 hidden sm:inline">·</span>
+            <span className="text-sm text-white/50 hidden sm:inline">Admin Dashboard</span>
           </div>
           <button onClick={handleLogout} className="text-sm text-white/50 hover:text-white transition-colors">
             Sign out
@@ -73,16 +73,16 @@ export default function AdminDashboard() {
       <hr className="gold-rule" />
 
       <div className="max-w-6xl mx-auto px-6 py-8">
-        {/* Tabs */}
+        {/* Tabs — horizontal, all visible, 12px */}
         <div className="border-b border-[#e8e0d4] mb-8">
-          <div className="flex gap-1">
+          <div className="flex">
             {TABS.map(t => {
               const badge = badgeFor(t.id)
               return (
                 <button
                   key={t.id}
                   onClick={() => setTab(t.id)}
-                  className={`px-5 py-3 text-sm font-medium transition-colors border-b-2 flex items-center gap-2 ${
+                  className={`flex-1 px-2 py-3 text-xs font-medium transition-colors border-b-2 flex items-center justify-center gap-1.5 whitespace-nowrap ${
                     tab === t.id
                       ? 'border-[#EF9F27] text-[#0B2818]'
                       : 'border-transparent text-[#888] hover:text-[#555]'

@@ -19,11 +19,14 @@ const VIBES = [
 ]
 
 const OBSERVANCE = [
-  { value: 'hiloni', label: 'Hiloni (secular)' },
+  { value: 'hiloni', label: 'Hiloni' },
   { value: 'traditional', label: 'Traditional' },
+  { value: 'dati', label: 'Dati' },
+  { value: 'sefardi', label: 'Sefardi' },
+  { value: 'ashkenazi', label: 'Ashkenazi' },
+  { value: 'haredi', label: 'Haredi' },
   { value: 'chabad', label: 'Chabad' },
-  { value: 'dati', label: 'Dati (religious)' },
-  { value: 'any', label: "Doesn't matter" },
+  { value: 'no_preference', label: 'No preference' },
 ]
 
 const toggleItem = (list: string[], item: string) =>

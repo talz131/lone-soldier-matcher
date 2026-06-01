@@ -64,15 +64,14 @@ export default function Step1Personal({ data, onChange, onNext }: Props) {
         <input type="tel" value={data.whatsappPhone} onChange={e => onChange({ whatsappPhone: e.target.value })} className={inp()} placeholder="+1 212 000 0000" />
       </div>
 
-      <div className="grid grid-cols-2 gap-4 mb-8">
-        <div>
-          <label className="block text-sm font-medium text-[#555] mb-1.5">Date of Birth</label>
-          <input type="date" value={data.dateOfBirth} onChange={e => onChange({ dateOfBirth: e.target.value })} className={inp()} />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-[#555] mb-1.5">Country of Origin</label>
-          <input type="text" value={data.countryOfOrigin} onChange={e => onChange({ countryOfOrigin: e.target.value })} className={inp()} placeholder="United States" />
-        </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-[#555] mb-1.5">Date of Birth</label>
+        <input type="date" value={data.dateOfBirth} onChange={e => onChange({ dateOfBirth: e.target.value })} className={inp()} />
+      </div>
+
+      <div className="mb-8">
+        <label className="block text-sm font-medium text-[#555] mb-1.5">Country of Origin</label>
+        <input type="text" value={data.countryOfOrigin} onChange={e => onChange({ countryOfOrigin: e.target.value })} className={inp()} placeholder="United States" />
       </div>
 
       <div className="flex justify-end">

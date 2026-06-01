@@ -44,11 +44,19 @@ export default function Step2Situation({ data, onChange, onNext, onBack }: Props
       </div>
 
       <div className="mb-6">
-        <label className="block text-sm font-medium text-[#555] mb-1.5">Service Type</label>
-        <div className="grid grid-cols-3 gap-2">
-          {['Combat', 'Non-combat', 'Yomiut', 'Atuda', 'Other'].map(opt => (
+        <label className="block text-sm font-medium text-[#555] mb-0.5">Leave frequency</label>
+        <p className="text-xs text-[#888] mb-2">How often do you get out of base?</p>
+        <div className="grid grid-cols-2 gap-2">
+          {[
+            'Daily (יומיות)',
+            '11/3',
+            '12/2',
+            'Every Thursday (חמשושים)',
+            'Irregular',
+            'Not yet drafted',
+          ].map(opt => (
             <button key={opt} type="button" onClick={() => onChange({ serviceType: opt })}
-              className={`py-2.5 px-4 rounded-xl border text-sm font-medium transition-all ${
+              className={`py-2.5 px-3 rounded-xl border text-sm font-medium transition-all text-left ${
                 data.serviceType === opt
                   ? 'bg-[#0F3D2E] border-[#0F3D2E] text-white'
                   : 'border-[#d4c9b8] text-[#555] hover:border-[#1D9E75] hover:text-[#1D9E75]'
@@ -77,7 +85,7 @@ export default function Step2Situation({ data, onChange, onNext, onBack }: Props
 
       <div className="mb-8">
         <label className="block text-sm font-medium text-[#555] mb-1.5">Hebrew Level</label>
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-2 gap-2">
           {[
             { value: 'none', label: 'None' },
             { value: 'basic', label: 'Basic' },
@@ -85,7 +93,7 @@ export default function Step2Situation({ data, onChange, onNext, onBack }: Props
             { value: 'fluent', label: 'Fluent' },
           ].map(opt => (
             <button key={opt.value} type="button" onClick={() => onChange({ hebrewLevel: opt.value })}
-              className={`py-2 px-2 rounded-xl border text-sm font-medium transition-all ${
+              className={`py-2.5 px-3 rounded-xl border text-sm font-medium transition-all ${
                 data.hebrewLevel === opt.value
                   ? 'bg-[#0F3D2E] border-[#0F3D2E] text-white'
                   : 'border-[#d4c9b8] text-[#555] hover:border-[#1D9E75]'
