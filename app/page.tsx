@@ -17,10 +17,6 @@ export default function Home() {
             priority
           />
 
-          <div className="inline-flex items-center gap-1 bg-amber-50 text-amber-700 text-[11px] font-medium px-2.5 py-0.5 rounded-full mb-3 border border-amber-200">
-            🇮🇱 Connecting Hearts Across Israel
-          </div>
-
           <h1 className="font-serif text-[1.25rem] text-[#0B2818] leading-snug mb-2">
             No soldier should feel<br />
             <span className="text-[#1D9E75]">alone</span> away from home.
@@ -81,8 +77,7 @@ export default function Home() {
         </section>
 
         {/* Footer */}
-        <footer className="py-3 flex justify-between items-center text-[11px] text-[#888] border-t border-[#e8e0d4]">
-          <span>© 2025 Lone Soldier Matcher</span>
+        <footer className="py-3 flex justify-end items-center text-[11px] text-[#888] border-t border-[#e8e0d4]">
           <Link href="/admin/login" className="hover:text-[#555] transition-colors">Admin</Link>
         </footer>
 
