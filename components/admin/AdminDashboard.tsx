@@ -56,19 +56,19 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-[#F9F6F0]">
-      {/* Nav — full width */}
-      <header className="bg-[#0F3D2E] w-full">
-        <div className="px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Image src="/logo.png" alt="Logo" width={36} height={36} className="rounded-full" />
-            <span className="font-semibold text-white">Lone Soldier Matcher</span>
-            <span className="text-white/30 hidden sm:inline">·</span>
-            <span className="text-sm text-white/50 hidden sm:inline">Admin Dashboard</span>
+
+      {/* Nav — intentionally full-width, no max-width constraint */}
+      <header style={{ background: '#0F3D2E', width: '100%' }}>
+        <div style={{ padding: '12px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <Image src="/logo.png" alt="Logo" width={32} height={32} className="rounded-full" />
+            <span style={{ fontWeight: 600, color: 'white', fontSize: 14 }}>Lone Soldier Matcher</span>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="text-sm text-white/40">Dashboard</span>
-            <span className="text-white/20">·</span>
-            <button onClick={handleLogout} className="text-sm text-white/60 hover:text-white transition-colors">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)' }}>Dashboard</span>
+            <span style={{ color: 'rgba(255,255,255,0.2)' }}>·</span>
+            <button onClick={handleLogout} style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', background: 'none', border: 'none', cursor: 'pointer' }}
+              className="hover:text-white transition-colors">
               Sign out
             </button>
           </div>
@@ -76,25 +76,42 @@ export default function AdminDashboard() {
       </header>
       <hr className="gold-rule" />
 
-      <div className="max-w-6xl mx-auto px-6 py-8">
-        {/* Tabs — horizontal, all visible, 12px */}
-        <div className="border-b border-[#e8e0d4] mb-8">
-          <div className="flex">
+      <div className="max-w-6xl mx-auto px-4 py-6">
+
+        {/* Tabs — all four on one line, 11px, minimal padding */}
+        <div style={{ borderBottom: '1px solid #e8e0d4', marginBottom: 24 }}>
+          <div style={{ display: 'flex' }}>
             {TABS.map(t => {
               const badge = badgeFor(t.id)
+              const active = tab === t.id
               return (
                 <button
                   key={t.id}
                   onClick={() => setTab(t.id)}
-                  className={`flex-1 px-1 py-2 text-[11px] font-medium transition-colors border-b-2 flex items-center justify-center gap-1 whitespace-nowrap ${
-                    tab === t.id
-                      ? 'border-[#EF9F27] text-[#0B2818]'
-                      : 'border-transparent text-[#888] hover:text-[#555]'
-                  }`}
+                  style={{
+                    flex: 1,
+                    padding: '8px 2px',
+                    fontSize: 11,
+                    fontWeight: 500,
+                    whiteSpace: 'nowrap',
+                    borderBottom: active ? '2px solid #EF9F27' : '2px solid transparent',
+                    color: active ? '#0B2818' : '#888',
+                    background: 'none',
+                    border: 'none',
+                    borderBottomStyle: 'solid',
+                    borderBottomWidth: 2,
+                    borderBottomColor: active ? '#EF9F27' : 'transparent',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 3,
+                    transition: 'color 0.15s',
+                  }}
                 >
                   {t.label}
                   {badge > 0 && (
-                    <span className="bg-amber-100 text-amber-700 text-xs px-1.5 py-0.5 rounded-full font-bold">
+                    <span style={{ background: '#fef3c7', color: '#b45309', fontSize: 10, padding: '1px 5px', borderRadius: 99, fontWeight: 700 }}>
                       {badge}
                     </span>
                   )}
@@ -105,10 +122,10 @@ export default function AdminDashboard() {
         </div>
 
         <div>
-          {tab === 'pending' && <PendingTab />}
+          {tab === 'pending'  && <PendingTab />}
           {tab === 'families' && <FamiliesTab />}
-          {tab === 'matches' && <MatchesTab />}
-          {tab === 'flags' && <FlagsTab />}
+          {tab === 'matches'  && <MatchesTab />}
+          {tab === 'flags'    && <FlagsTab />}
         </div>
       </div>
     </div>

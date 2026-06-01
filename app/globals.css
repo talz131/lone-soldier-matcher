@@ -9,20 +9,23 @@
   }
 }
 
-@layer utilities {
-  .gold-rule {
-    border: none;
-    height: 1px;
-    background-color: #EF9F27;
-    opacity: 0.45;
-    margin: 0;
-  }
-  .font-serif {
-    font-family: Georgia, 'Times New Roman', serif;
-  }
-  .page-shell {
-    max-width: 480px;
-    margin-left: auto;
-    margin-right: auto;
-  }
+/* These classes are defined here (not as Tailwind arbitrary values) so they
+   are always included in the build output regardless of purging. */
+.gold-rule {
+  border: none;
+  height: 1px;
+  background-color: #EF9F27;
+  opacity: 0.45;
+  margin: 0;
+}
+
+.font-serif {
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+/* Central content shell: 420px max, always centred */
+.page-shell {
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
 }

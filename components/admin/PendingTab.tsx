@@ -63,92 +63,117 @@ export default function PendingTab() {
 
   return (
     <div>
-      <div className="flex gap-2 mb-6">
+      {/* Sub-tabs: Lone Soldiers / Host Families */}
+      <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
         {(['soldiers', 'families'] as const).map(v => (
           <button key={v} onClick={() => setView(v)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${
-              view === v ? 'bg-[#0F3D2E] text-white' : 'bg-white border border-[#e8e0d4] text-[#555] hover:border-[#0F3D2E]'
-            }`}
+            style={{
+              padding: '6px 14px',
+              borderRadius: 99,
+              fontSize: 13,
+              fontWeight: 500,
+              border: view === v ? 'none' : '1px solid #e8e0d4',
+              background: view === v ? '#0F3D2E' : 'white',
+              color: view === v ? 'white' : '#555',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+            }}
           >
             {v === 'soldiers' ? 'Lone Soldiers' : 'Host Families'}
             {count[v] > 0 && (
-              <span className={`text-xs px-1.5 py-0.5 rounded-full font-bold ${
-                view === v ? 'bg-white text-[#0F3D2E]' : 'bg-amber-100 text-amber-700'
-              }`}>{count[v]}</span>
+              <span style={{
+                fontSize: 11,
+                padding: '1px 6px',
+                borderRadius: 99,
+                fontWeight: 700,
+                background: view === v ? 'white' : '#fef3c7',
+                color: view === v ? '#0F3D2E' : '#b45309',
+              }}>{count[v]}</span>
             )}
           </button>
         ))}
       </div>
 
       {loading ? (
-        <div className="text-center py-16 text-[#888]">Loading...</div>
+        <div style={{ textAlign: 'center', padding: '64px 0', color: '#888' }}>Loading...</div>
       ) : items.length === 0 ? (
-        <div className="text-center py-16 text-[#888]">
-          <div className="text-4xl mb-3">✅</div>
-          <p className="font-medium">All caught up! No pending {view}.</p>
+        <div style={{ textAlign: 'center', padding: '64px 0', color: '#888' }}>
+          <div style={{ fontSize: 36, marginBottom: 12 }}>✅</div>
+          <p style={{ fontWeight: 500 }}>All caught up! No pending {view}.</p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {items.map(item => {
             const id = item.id
+
+            // Row 1: name
             const name = view === 'soldiers'
               ? `${(item as Soldier).first_name} ${(item as Soldier).last_name}`
               : (item as HostFamily).contact_name
-            const sub = view === 'soldiers'
+
+            // Row 2: base/city + date — filter(Boolean) prevents double dots
+            const subParts: string[] = view === 'soldiers'
               ? [
                   (item as Soldier).base_location ?? 'No base',
-                  (item as Soldier).country_of_origin,
+                  (item as Soldier).country_of_origin ?? '',   // empty string filtered below
                   new Date(item.created_at).toLocaleDateString(),
-                ].filter(Boolean).join(' · ')
+                ].filter(p => p.trim() !== '')
               : [
                   (item as HostFamily).city ?? 'No city',
                   new Date(item.created_at).toLocaleDateString(),
-                ].join(' · ')
+                ]
+            const sub = subParts.join(' · ')
+
             const isOpen = expanded === id
 
             return (
-              <div key={id} className="border border-[#e8e0d4] rounded-2xl overflow-hidden">
-                <div className="p-4 bg-white">
-                  {/* Row 1: name + meta */}
-                  <p className="font-semibold text-[#0B2818] truncate">{name}</p>
-                  <p className="text-xs text-[#888] mt-0.5">{sub}</p>
-                  {/* Row 2: action buttons */}
-                  <div className="flex items-center gap-2 mt-3">
+              <div key={id} style={{ border: '1px solid #e8e0d4', borderRadius: 16, overflow: 'hidden' }}>
+                <div style={{ padding: 14, background: 'white' }}>
+                  {/* Row 1: name */}
+                  <p style={{ fontWeight: 600, color: '#0B2818', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{name}</p>
+                  {/* Row 2: meta */}
+                  <p style={{ fontSize: 12, color: '#888', margin: '3px 0 0' }}>{sub}</p>
+                  {/* Row 3: action buttons */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 10 }}>
                     <button onClick={() => setExpanded(isOpen ? null : id)}
-                      className="text-xs text-[#555] hover:text-[#0B2818] px-3 py-1.5 rounded-lg border border-[#e8e0d4] hover:bg-[#F9F6F0] transition">
+                      style={{ fontSize: 12, color: '#555', padding: '5px 10px', borderRadius: 8, border: '1px solid #e8e0d4', background: 'white', cursor: 'pointer' }}>
                       {isOpen ? 'Collapse' : 'View details'}
                     </button>
                     <button onClick={() => view === 'soldiers' ? updateSoldier(id, 'declined') : updateFamily(id, 'declined')}
-                      className="text-xs font-medium text-red-600 px-3 py-1.5 rounded-lg border border-red-200 hover:bg-red-50 transition">
+                      style={{ fontSize: 12, fontWeight: 500, color: '#dc2626', padding: '5px 10px', borderRadius: 8, border: '1px solid #fecaca', background: 'white', cursor: 'pointer' }}>
                       Decline
                     </button>
                     <button onClick={() => view === 'soldiers' ? updateSoldier(id, 'approved') : updateFamily(id, 'approved')}
-                      className="text-xs font-medium text-white bg-[#1D9E75] px-3 py-1.5 rounded-lg hover:bg-[#178a63] transition">
+                      style={{ fontSize: 12, fontWeight: 500, color: 'white', padding: '5px 10px', borderRadius: 8, border: 'none', background: '#1D9E75', cursor: 'pointer' }}>
                       Approve
                     </button>
                   </div>
                 </div>
 
                 {isOpen && (
-                  <div className="border-t border-[#e8e0d4] bg-[#F9F6F0] p-4 space-y-3">
+                  <div style={{ borderTop: '1px solid #e8e0d4', background: '#F9F6F0', padding: 14, display: 'flex', flexDirection: 'column', gap: 12 }}>
                     {view === 'soldiers' && (() => {
                       const s = item as Soldier
                       return (
-                        <div className="grid grid-cols-2 gap-3 text-sm">
-                          <Detail label="Email" value={s.email} />
-                          <Detail label="Phone" value={s.phone} />
-                          <Detail label="Date of Birth" value={s.date_of_birth} />
-                          <Detail label="Country" value={s.country_of_origin} />
-                          <Detail label="Base" value={s.base_location} />
-                          <Detail label="Service Type" value={s.service_type} />
-                          <Detail label="Hebrew Level" value={s.hebrew_level} />
-                          <Detail label="Languages" value={s.languages?.join(', ')} />
-                          <Detail label="Observance Pref." value={s.religious_observance} />
-                          <Detail label="Pets OK?" value={s.pets_ok ? 'Yes' : 'No'} />
-                          <Detail label="Dietary Restrictions" value={s.has_dietary_restrictions ? s.dietary_details || 'Yes' : 'None'} />
-                          <Detail label="Military ID" value={s.military_id_url ? '✅ Uploaded' : '❌ Not uploaded'} />
-                        </div>
-                        <MatchSuggestions soldier={s} />
+                        <>
+                          <div className="grid grid-cols-2 gap-3 text-sm">
+                            <Detail label="Email" value={s.email} />
+                            <Detail label="Phone" value={s.phone} />
+                            <Detail label="Date of Birth" value={s.date_of_birth} />
+                            <Detail label="Country" value={s.country_of_origin} />
+                            <Detail label="Base" value={s.base_location} />
+                            <Detail label="Leave Frequency" value={s.service_type} />
+                            <Detail label="Hebrew Level" value={s.hebrew_level} />
+                            <Detail label="Languages" value={s.languages?.join(', ')} />
+                            <Detail label="Observance Pref." value={s.religious_observance} />
+                            <Detail label="Pets OK?" value={s.pets_ok ? 'Yes' : 'No'} />
+                            <Detail label="Dietary Restrictions" value={s.has_dietary_restrictions ? s.dietary_details || 'Yes' : 'None'} />
+                            <Detail label="Military ID" value={s.military_id_url ? '✅ Uploaded' : '❌ Not uploaded'} />
+                          </div>
+                          <MatchSuggestions soldier={s} />
+                        </>
                       )
                     })()}
 
@@ -181,13 +206,13 @@ export default function PendingTab() {
                       <textarea value={notes[id] ?? ''} onChange={e => setNotes(prev => ({ ...prev, [id]: e.target.value }))} className={adminInp} rows={2} placeholder="Private note..." />
                     </div>
 
-                    <div className="flex gap-2">
+                    <div>
                       <button
                         onClick={async () => {
                           const desc = prompt('Flag description:')
                           if (desc) await addFlag(view === 'soldiers' ? 'soldier' : 'family', id, desc)
                         }}
-                        className="text-xs text-amber-700 border border-amber-200 px-3 py-1.5 rounded-lg hover:bg-amber-50 transition"
+                        style={{ fontSize: 12, color: '#b45309', border: '1px solid #fde68a', padding: '5px 10px', borderRadius: 8, background: 'white', cursor: 'pointer' }}
                       >
                         🚩 Add Flag
                       </button>
