@@ -100,8 +100,8 @@ export default function SoldierOnboarding() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h3 className="text-2xl font-bold text-gray-800 mb-3">Application received!</h3>
-        <p className="text-gray-500 max-w-sm mx-auto leading-relaxed">
+        <h3 className="font-serif text-2xl text-[#0B2818] mb-3">Application received!</h3>
+        <p className="text-[#555] max-w-sm mx-auto leading-relaxed">
           Thank you for registering. Our team will review your application and reach out within
           3–5 business days. You&apos;re not alone — we&apos;ve got you.
         </p>
@@ -112,7 +112,6 @@ export default function SoldierOnboarding() {
   return (
     <>
       <StepIndicator currentStep={step} totalSteps={4} steps={STEPS} color="#1D9E75" />
-
       {step === 1 && <Step1Personal data={data} onChange={update} onNext={() => setStep(2)} />}
       {step === 2 && <Step2Situation data={data} onChange={update} onNext={() => setStep(3)} onBack={() => setStep(1)} />}
       {step === 3 && <Step3Preferences data={data} onChange={update} onNext={() => setStep(4)} onBack={() => setStep(2)} />}

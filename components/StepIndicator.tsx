@@ -11,11 +11,20 @@ export default function StepIndicator({ currentStep, totalSteps, steps, color }:
   return (
     <div className="mb-10">
       <div className="relative flex items-start justify-between">
-        <div className="absolute left-0 right-0 top-4 h-0.5 bg-gray-200" />
+        {/* Track background */}
+        <div className="absolute left-0 right-0 top-4 h-0.5 bg-[#e8e0d4]" />
+        {/* Track fill */}
         <div
           className="absolute left-0 top-4 h-0.5 transition-all duration-500"
           style={{ backgroundColor: color, width: `${progress}%` }}
         />
+        {/* Gold accent dot at progress point */}
+        {progress > 0 && progress < 100 && (
+          <div
+            className="absolute top-[11px] w-2.5 h-2.5 rounded-full border-2 border-[#EF9F27] bg-white z-20 transition-all duration-500"
+            style={{ left: `calc(${progress}% - 5px)` }}
+          />
+        )}
 
         {steps.map((step, index) => {
           const n = index + 1
@@ -29,20 +38,18 @@ export default function StepIndicator({ currentStep, totalSteps, steps, color }:
                 style={
                   done || active
                     ? { backgroundColor: color, color: '#fff' }
-                    : { backgroundColor: '#fff', border: '2px solid #d1d5db', color: '#9ca3af' }
+                    : { backgroundColor: '#fff', border: '2px solid #d4c9b8', color: '#888' }
                 }
               >
                 {done ? (
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
-                ) : (
-                  n
-                )}
+                ) : n}
               </div>
               <span
                 className="text-xs font-medium whitespace-nowrap"
-                style={{ color: active ? '#1f2937' : '#9ca3af' }}
+                style={{ color: active ? '#0B2818' : '#888' }}
               >
                 {step}
               </span>

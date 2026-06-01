@@ -54,26 +54,26 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200">
+    <div className="min-h-screen bg-[#F9F6F0]">
+      {/* Nav */}
+      <header className="bg-[#0F3D2E]">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#1D9E75] to-[#534AB7]" />
-            <span className="font-bold text-gray-800">Lone Soldier Matcher</span>
-            <span className="text-gray-300">·</span>
-            <span className="text-sm text-gray-400">Admin Dashboard</span>
+            <span className="font-semibold text-white">Lone Soldier Matcher</span>
+            <span className="text-white/30">·</span>
+            <span className="text-sm text-white/50">Admin Dashboard</span>
           </div>
-          <button
-            onClick={handleLogout}
-            className="text-sm text-gray-400 hover:text-gray-600 transition-colors"
-          >
+          <button onClick={handleLogout} className="text-sm text-white/50 hover:text-white transition-colors">
             Sign out
           </button>
         </div>
       </header>
+      <hr className="gold-rule" />
 
       <div className="max-w-6xl mx-auto px-6 py-8">
-        <div className="border-b border-gray-200 mb-8">
+        {/* Tabs */}
+        <div className="border-b border-[#e8e0d4] mb-8">
           <div className="flex gap-1">
             {TABS.map(t => {
               const badge = badgeFor(t.id)
@@ -83,13 +83,13 @@ export default function AdminDashboard() {
                   onClick={() => setTab(t.id)}
                   className={`px-5 py-3 text-sm font-medium transition-colors border-b-2 flex items-center gap-2 ${
                     tab === t.id
-                      ? 'border-gray-800 text-gray-800'
-                      : 'border-transparent text-gray-400 hover:text-gray-600'
+                      ? 'border-[#EF9F27] text-[#0B2818]'
+                      : 'border-transparent text-[#888] hover:text-[#555]'
                   }`}
                 >
                   {t.label}
                   {badge > 0 && (
-                    <span className="bg-orange-100 text-orange-600 text-xs px-1.5 py-0.5 rounded-full font-bold">
+                    <span className="bg-amber-100 text-amber-700 text-xs px-1.5 py-0.5 rounded-full font-bold">
                       {badge}
                     </span>
                   )}

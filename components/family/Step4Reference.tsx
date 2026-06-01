@@ -13,8 +13,8 @@ type Props = {
 }
 
 const inp = (err?: string) =>
-  `w-full border rounded-xl px-3.5 py-2.5 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#534AB7] focus:border-transparent transition text-sm ${
-    err ? 'border-red-400 bg-red-50' : 'border-gray-200'
+  `w-full border rounded-xl px-3.5 py-2.5 bg-white text-[#0B2818] placeholder-[#888] focus:outline-none focus:ring-2 focus:ring-[#534AB7] focus:border-transparent transition text-sm ${
+    err ? 'border-red-400 bg-red-50' : 'border-[#d4c9b8]'
   }`
 
 export default function Step4Reference({ data, onChange, onSubmit, onBack, loading, error }: Props) {
@@ -31,57 +31,36 @@ export default function Step4Reference({ data, onChange, onSubmit, onBack, loadi
 
   return (
     <div>
-      <h2 className="text-xl font-bold text-gray-800 mb-1">One last thing — a reference</h2>
-      <p className="text-gray-400 text-sm mb-7">
-        We may reach out to your reference to confirm your application. This helps us keep our
-        soldiers safe.
+      <h2 className="font-serif text-xl text-[#0B2818] mb-1">One last thing — a reference</h2>
+      <p className="text-[#888] text-sm mb-7">
+        We may reach out to your reference to confirm your application. This helps us keep our soldiers safe.
       </p>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">Reference Full Name *</label>
-        <input
-          type="text"
-          value={data.referenceName}
-          onChange={e => onChange({ referenceName: e.target.value })}
-          className={inp(errors.referenceName)}
-          placeholder="Miriam Cohen"
-        />
+        <label className="block text-sm font-medium text-[#555] mb-1.5">Reference Full Name *</label>
+        <input type="text" value={data.referenceName} onChange={e => onChange({ referenceName: e.target.value })} className={inp(errors.referenceName)} placeholder="Miriam Cohen" />
         {errors.referenceName && <p className="text-red-500 text-xs mt-1">{errors.referenceName}</p>}
       </div>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">Reference Phone *</label>
-        <input
-          type="tel"
-          value={data.referencePhone}
-          onChange={e => onChange({ referencePhone: e.target.value })}
-          className={inp(errors.referencePhone)}
-          placeholder="+972 50 000 0000"
-        />
+        <label className="block text-sm font-medium text-[#555] mb-1.5">Reference Phone *</label>
+        <input type="tel" value={data.referencePhone} onChange={e => onChange({ referencePhone: e.target.value })} className={inp(errors.referencePhone)} placeholder="+972 50 000 0000" />
         {errors.referencePhone && <p className="text-red-500 text-xs mt-1">{errors.referencePhone}</p>}
       </div>
 
-      <div className="mb-8">
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">Relationship to Your Family</label>
-        <input
-          type="text"
-          value={data.referenceRelationship}
-          onChange={e => onChange({ referenceRelationship: e.target.value })}
-          className={inp()}
-          placeholder="Rabbi, neighbor, community leader..."
-        />
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-[#555] mb-1.5">Relationship to Your Family</label>
+        <input type="text" value={data.referenceRelationship} onChange={e => onChange({ referenceRelationship: e.target.value })} className={inp()} placeholder="Rabbi, neighbor, community leader..." />
       </div>
 
-      <label className={`flex items-start gap-3 p-4 rounded-xl border cursor-pointer mb-8 ${
-        errors.terms ? 'border-red-400 bg-red-50' : data.agreedToTerms ? 'border-[#534AB7] bg-[#eeedf8]' : 'border-gray-200'
+      {/* Gold divider */}
+      <hr className="gold-rule mb-6" />
+
+      <label className={`flex items-start gap-3 p-4 rounded-xl border cursor-pointer mb-8 transition-colors ${
+        errors.terms ? 'border-red-400 bg-red-50' : data.agreedToTerms ? 'border-[#534AB7] bg-[#eeedf8]' : 'border-[#d4c9b8]'
       }`}>
-        <input
-          type="checkbox"
-          checked={data.agreedToTerms}
-          onChange={e => onChange({ agreedToTerms: e.target.checked })}
-          className="w-4 h-4 mt-0.5 accent-[#534AB7]"
-        />
-        <span className="text-sm text-gray-600 leading-relaxed">
+        <input type="checkbox" checked={data.agreedToTerms} onChange={e => onChange({ agreedToTerms: e.target.checked })} className="w-4 h-4 mt-0.5 accent-[#534AB7]" />
+        <span className="text-sm text-[#555] leading-relaxed">
           I understand that the team may contact my reference to verify my application, and I give
           permission to do so. I confirm that the information I&apos;ve provided is accurate.
         </span>
@@ -89,27 +68,17 @@ export default function Step4Reference({ data, onChange, onSubmit, onBack, loadi
       {errors.terms && <p className="text-red-500 text-xs -mt-6 mb-6">{errors.terms}</p>}
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-sm text-red-600">
-          {error}
-        </div>
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-sm text-red-600">{error}</div>
       )}
 
       <div className="flex justify-between">
-        <button
-          onClick={onBack}
-          disabled={loading}
-          className="text-gray-400 px-6 py-2.5 rounded-full text-sm font-semibold hover:text-gray-600 transition-colors flex items-center gap-2 disabled:opacity-50"
-        >
+        <button onClick={onBack} disabled={loading} className="text-[#888] px-6 py-2.5 rounded-full text-sm font-semibold hover:text-[#555] transition-colors flex items-center gap-2 disabled:opacity-50">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
           Back
         </button>
-        <button
-          onClick={() => { if (validate()) onSubmit() }}
-          disabled={loading}
-          className="bg-[#534AB7] text-white px-8 py-2.5 rounded-full text-sm font-semibold hover:bg-[#4339a0] transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
-        >
+        <button onClick={() => { if (validate()) onSubmit() }} disabled={loading} className="bg-[#0F3D2E] text-white px-8 py-2.5 rounded-full text-sm font-semibold hover:bg-[#534AB7] transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2">
           {loading ? (
             <>
               <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -118,9 +87,7 @@ export default function Step4Reference({ data, onChange, onSubmit, onBack, loadi
               </svg>
               Submitting...
             </>
-          ) : (
-            'Submit Application'
-          )}
+          ) : 'Submit Application'}
         </button>
       </div>
     </div>

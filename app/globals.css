@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #F9F6F0;
+    color: #555;
+  }
+}
+
+@layer utilities {
+  .gold-rule {
+    border: none;
+    height: 1px;
+    background-color: #EF9F27;
+    opacity: 0.45;
+    margin: 0;
+  }
+  .font-serif {
+    font-family: Georgia, 'Times New Roman', serif;
+  }
+}
