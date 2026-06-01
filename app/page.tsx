@@ -3,90 +3,92 @@ import Image from 'next/image'
 
 export default function Home() {
   return (
-    <main className="bg-[#F9F6F0] min-h-screen">
-      <div style={{ maxWidth: 480, margin: '0 auto', padding: '0 20px' }}>
+    // Outer shell — identical to admin login page
+    <div className="min-h-screen bg-[#F9F6F0] flex flex-col">
 
-        {/* Hero */}
-        <section style={{ paddingTop: 48, paddingBottom: 24, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-          <Image
-            src="/logo.png"
-            alt="Lone Soldier Matcher"
-            width={70}
-            height={70}
-            className="rounded-full shadow-md"
-            style={{ marginBottom: 10 }}
-            priority
-          />
+      {/* Centring layer — identical to admin login page */}
+      <div className="flex-1 flex items-center justify-center px-4 py-12">
 
-          <h1 className="font-serif" style={{ fontSize: 18, color: '#0B2818', lineHeight: 1.3, marginBottom: 6 }}>
-            No soldier should feel<br />
-            <span style={{ color: '#1D9E75' }}>alone</span> away from home.
-          </h1>
+        {/* Content card — identical max-width to admin login page */}
+        <div className="w-full max-w-sm">
 
-          <p style={{ fontSize: 12, color: '#555', lineHeight: 1.5, maxWidth: 280, margin: '0 auto' }}>
-            We match lone soldiers serving in the IDF with warm host families who open their
-            homes, their Shabbat tables, and their hearts.
-          </p>
-        </section>
+          {/* Hero */}
+          <div className="text-center mb-8">
+            <Image
+              src="/logo.png"
+              alt="Lone Soldier Matcher"
+              width={80}
+              height={80}
+              className="rounded-full mx-auto mb-4 shadow-md"
+              priority
+            />
+            <h1 className="font-serif text-2xl text-[#0B2818] leading-snug mb-2">
+              No soldier should feel<br />
+              <span className="text-[#1D9E75]">alone</span> away from home.
+            </h1>
+            <p className="text-sm text-[#555] leading-relaxed">
+              We match lone soldiers with warm host families who open their
+              homes, their Shabbat tables, and their hearts.
+            </p>
+          </div>
 
-        {/* Gold divider */}
-        <hr className="gold-rule" style={{ marginBottom: 10 }} />
+          {/* Gold divider */}
+          <hr className="gold-rule mb-4" />
 
-        {/* Cards */}
-        <section style={{ paddingBottom: 10, display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <Link href="/soldier" className="group block">
-            <div className="bg-white border border-[#e8e0d4] group-hover:border-[#1D9E75] group-hover:shadow-sm transition-all duration-200"
-              style={{ borderRadius: 12, padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div style={{ width: 36, height: 36, background: '#e6f7f1', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <svg style={{ width: 18, height: 18, color: '#1D9E75' }} fill="none" viewBox="0 0 24 24" stroke="#1D9E75" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
+          {/* Cards */}
+          <div className="flex flex-col gap-3 mb-6">
+            <Link href="/soldier" className="group block">
+              <div className="bg-white rounded-2xl p-4 border border-[#e8e0d4] group-hover:border-[#1D9E75] group-hover:shadow-sm transition-all duration-200 flex items-center gap-3">
+                <div className="w-10 h-10 bg-[#e6f7f1] rounded-xl flex items-center justify-center shrink-0">
+                  <svg className="w-5 h-5 text-[#1D9E75]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-bold text-[#0B2818]">I&apos;m a Lone Soldier</p>
+                  <p className="text-xs text-[#888] leading-snug mt-0.5">
+                    Find a warm home base — Shabbat dinner, a bed on your day off, or just someone to talk to.
+                  </p>
+                </div>
+                <div className="shrink-0 w-7 h-7 rounded-full bg-[#0F3D2E] flex items-center justify-center group-hover:bg-[#1D9E75] transition-colors">
+                  <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
               </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <p style={{ fontSize: 13, fontWeight: 700, color: '#0B2818', margin: 0 }}>I&apos;m a Lone Soldier</p>
-                <p style={{ fontSize: 11, color: '#888', margin: '2px 0 0', lineHeight: 1.35 }}>
-                  Find a warm home base — Shabbat dinner, a bed on your day off, or just someone to talk to.
-                </p>
-              </div>
-              <div className="group-hover:bg-[#1D9E75] transition-colors"
-                style={{ width: 26, height: 26, borderRadius: '50%', background: '#0F3D2E', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <svg style={{ width: 12, height: 12 }} fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-            </div>
-          </Link>
+            </Link>
 
-          <Link href="/family" className="group block">
-            <div className="bg-white border border-[#e8e0d4] group-hover:border-[#534AB7] group-hover:shadow-sm transition-all duration-200"
-              style={{ borderRadius: 12, padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div style={{ width: 36, height: 36, background: '#eeedf8', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <svg style={{ width: 18, height: 18 }} fill="none" viewBox="0 0 24 24" stroke="#534AB7" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
+            <Link href="/family" className="group block">
+              <div className="bg-white rounded-2xl p-4 border border-[#e8e0d4] group-hover:border-[#534AB7] group-hover:shadow-sm transition-all duration-200 flex items-center gap-3">
+                <div className="w-10 h-10 bg-[#eeedf8] rounded-xl flex items-center justify-center shrink-0">
+                  <svg className="w-5 h-5 text-[#534AB7]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                  </svg>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-bold text-[#0B2818]">I&apos;m a Host Family</p>
+                  <p className="text-xs text-[#888] leading-snug mt-0.5">
+                    Open your table, your guest room, or just your door to a young soldier far from home.
+                  </p>
+                </div>
+                <div className="shrink-0 w-7 h-7 rounded-full bg-[#0F3D2E] flex items-center justify-center group-hover:bg-[#534AB7] transition-colors">
+                  <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
               </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <p style={{ fontSize: 13, fontWeight: 700, color: '#0B2818', margin: 0 }}>I&apos;m a Host Family</p>
-                <p style={{ fontSize: 11, color: '#888', margin: '2px 0 0', lineHeight: 1.35 }}>
-                  Open your table, your guest room, or just your door to a young soldier far from home.
-                </p>
-              </div>
-              <div className="group-hover:bg-[#534AB7] transition-colors"
-                style={{ width: 26, height: 26, borderRadius: '50%', background: '#0F3D2E', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <svg style={{ width: 12, height: 12 }} fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-            </div>
-          </Link>
-        </section>
+            </Link>
+          </div>
 
-        {/* Footer */}
-        <footer style={{ padding: '8px 0', display: 'flex', justifyContent: 'flex-end', fontSize: 11, color: '#888', borderTop: '1px solid #e8e0d4' }}>
-          <Link href="/admin/login" style={{ color: '#888' }} className="hover:text-[#555] transition-colors">Admin</Link>
-        </footer>
+          {/* Footer link */}
+          <div className="text-center">
+            <Link href="/admin/login" className="text-xs text-[#888] hover:text-[#555] transition-colors">
+              Admin
+            </Link>
+          </div>
 
+        </div>
       </div>
-    </main>
+    </div>
   )
 }
