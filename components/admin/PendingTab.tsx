@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase-client'
 import type { Soldier, HostFamily } from '@/types'
+import MatchSuggestions from './MatchSuggestions'
 
 const adminInp = `w-full border border-[#d4c9b8] rounded-lg px-3 py-2 text-sm bg-white text-[#0B2818] focus:outline-none focus:ring-2 focus:ring-[#0F3D2E] resize-none`
 
@@ -94,28 +95,35 @@ export default function PendingTab() {
               ? `${(item as Soldier).first_name} ${(item as Soldier).last_name}`
               : (item as HostFamily).contact_name
             const sub = view === 'soldiers'
-              ? `${(item as Soldier).base_location ?? 'No base'} · ${(item as Soldier).country_of_origin ?? ''}`
-              : `${(item as HostFamily).city ?? 'No city'}`
+              ? [
+                  (item as Soldier).base_location ?? 'No base',
+                  (item as Soldier).country_of_origin,
+                  new Date(item.created_at).toLocaleDateString(),
+                ].filter(Boolean).join(' · ')
+              : [
+                  (item as HostFamily).city ?? 'No city',
+                  new Date(item.created_at).toLocaleDateString(),
+                ].join(' · ')
             const isOpen = expanded === id
 
             return (
               <div key={id} className="border border-[#e8e0d4] rounded-2xl overflow-hidden">
-                <div className="flex items-center justify-between p-4 bg-white">
-                  <div>
-                    <p className="font-semibold text-[#0B2818]">{name}</p>
-                    <p className="text-sm text-[#888]">{sub} · {new Date(item.created_at).toLocaleDateString()}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
+                <div className="p-4 bg-white">
+                  {/* Row 1: name + meta */}
+                  <p className="font-semibold text-[#0B2818] truncate">{name}</p>
+                  <p className="text-xs text-[#888] mt-0.5">{sub}</p>
+                  {/* Row 2: action buttons */}
+                  <div className="flex items-center gap-2 mt-3">
                     <button onClick={() => setExpanded(isOpen ? null : id)}
-                      className="text-sm text-[#555] hover:text-[#0B2818] px-3 py-1.5 rounded-lg border border-[#e8e0d4] hover:bg-[#F9F6F0] transition">
+                      className="text-xs text-[#555] hover:text-[#0B2818] px-3 py-1.5 rounded-lg border border-[#e8e0d4] hover:bg-[#F9F6F0] transition">
                       {isOpen ? 'Collapse' : 'View details'}
                     </button>
                     <button onClick={() => view === 'soldiers' ? updateSoldier(id, 'declined') : updateFamily(id, 'declined')}
-                      className="text-sm font-medium text-red-600 px-3 py-1.5 rounded-lg border border-red-200 hover:bg-red-50 transition">
+                      className="text-xs font-medium text-red-600 px-3 py-1.5 rounded-lg border border-red-200 hover:bg-red-50 transition">
                       Decline
                     </button>
                     <button onClick={() => view === 'soldiers' ? updateSoldier(id, 'approved') : updateFamily(id, 'approved')}
-                      className="text-sm font-medium text-white bg-[#1D9E75] px-3 py-1.5 rounded-lg hover:bg-[#178a63] transition">
+                      className="text-xs font-medium text-white bg-[#1D9E75] px-3 py-1.5 rounded-lg hover:bg-[#178a63] transition">
                       Approve
                     </button>
                   </div>
@@ -140,6 +148,7 @@ export default function PendingTab() {
                           <Detail label="Dietary Restrictions" value={s.has_dietary_restrictions ? s.dietary_details || 'Yes' : 'None'} />
                           <Detail label="Military ID" value={s.military_id_url ? '✅ Uploaded' : '❌ Not uploaded'} />
                         </div>
+                        <MatchSuggestions soldier={s} />
                       )
                     })()}
 

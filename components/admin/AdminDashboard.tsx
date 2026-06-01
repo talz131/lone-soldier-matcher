@@ -65,9 +65,13 @@ export default function AdminDashboard() {
             <span className="text-white/30 hidden sm:inline">·</span>
             <span className="text-sm text-white/50 hidden sm:inline">Admin Dashboard</span>
           </div>
-          <button onClick={handleLogout} className="text-sm text-white/50 hover:text-white transition-colors">
-            Sign out
-          </button>
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-white/40">Dashboard</span>
+            <span className="text-white/20">·</span>
+            <button onClick={handleLogout} className="text-sm text-white/60 hover:text-white transition-colors">
+              Sign out
+            </button>
+          </div>
         </div>
       </header>
       <hr className="gold-rule" />
@@ -82,7 +86,7 @@ export default function AdminDashboard() {
                 <button
                   key={t.id}
                   onClick={() => setTab(t.id)}
-                  className={`flex-1 px-2 py-3 text-xs font-medium transition-colors border-b-2 flex items-center justify-center gap-1.5 whitespace-nowrap ${
+                  className={`flex-1 px-1 py-2 text-[11px] font-medium transition-colors border-b-2 flex items-center justify-center gap-1 whitespace-nowrap ${
                     tab === t.id
                       ? 'border-[#EF9F27] text-[#0B2818]'
                       : 'border-transparent text-[#888] hover:text-[#555]'
