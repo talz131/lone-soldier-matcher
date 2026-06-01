@@ -3,12 +3,11 @@ import Image from 'next/image'
 
 export default function Home() {
   return (
-    <main className="h-screen bg-[#F9F6F0] overflow-hidden">
-      {/* Hard-code the shell constraint inline so it cannot be purged */}
-      <div style={{ maxWidth: 420, margin: '0 auto', height: '100%', display: 'flex', flexDirection: 'column', padding: '0 16px' }}>
+    <main className="bg-[#F9F6F0] min-h-screen">
+      <div style={{ maxWidth: 480, margin: '0 auto', padding: '0 20px' }}>
 
-        {/* Hero — flex-1 centres content vertically in remaining space */}
-        <section style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
+        {/* Hero */}
+        <section style={{ paddingTop: 48, paddingBottom: 24, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
           <Image
             src="/logo.png"
             alt="Lone Soldier Matcher"
