@@ -112,26 +112,6 @@ export default function Step2Household({ data, onChange, onNext, onBack }: Props
         </div>
       </div>
 
-      <div className="mb-8">
-        <label className="block text-sm font-medium text-[#555] mb-2">What can you offer the soldier?</label>
-        <div className="grid grid-cols-2 gap-2">
-          {[
-            { value: 'private_room', label: 'Private room' },
-            { value: 'shared_room', label: 'Shared room' },
-            { value: 'couch', label: 'Couch / pullout' },
-            { value: 'meals_only', label: 'Meals only' },
-          ].map(opt => (
-            <button key={opt.value} type="button" onClick={() => onChange({ availableSpace: opt.value })}
-              className={`py-2.5 px-4 rounded-xl border text-sm font-medium transition-all text-left ${
-                data.availableSpace === opt.value
-                  ? 'bg-[#eeedf8] border-[#534AB7] text-[#534AB7]'
-                  : 'border-[#d4c9b8] text-[#555] hover:border-[#534AB7]'
-              }`}
-            >{opt.label}</button>
-          ))}
-        </div>
-      </div>
-
       <div className="flex justify-between">
         <button onClick={onBack} className="text-[#888] px-6 py-2.5 rounded-full text-sm font-semibold hover:text-[#555] transition-colors flex items-center gap-2">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
