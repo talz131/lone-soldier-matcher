@@ -31,9 +31,12 @@ CREATE TABLE soldiers (
   has_dietary_restrictions BOOLEAN DEFAULT FALSE,
   dietary_details TEXT,
 
-  -- Step 4: Verification
-  military_id_url TEXT,
-  reference_phone TEXT,
+  -- Step 4: Reference & Verification
+  military_id_url        TEXT,
+  reference_name         TEXT,
+  reference_phone        TEXT,
+  reference_relationship TEXT,
+  additional_notes       TEXT,
 
   -- Admin
   status          TEXT DEFAULT 'pending' CHECK (status IN ('pending','approved','declined','matched')),

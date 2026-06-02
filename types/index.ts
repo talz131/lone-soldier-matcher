@@ -95,7 +95,12 @@ export type SoldierFormData = {
   petsOk: boolean
   hasDietaryRestrictions: boolean
   dietaryDetails: string
+  // Step 4 — Reference & Verification
+  referenceName: string
   referencePhone: string
+  referenceRelationship: string
+  referenceAgreed: boolean
+  additionalNotes: string
   militaryIdFile: File | null
 }
 

@@ -12,32 +12,43 @@ type Props = {
   error: string
 }
 
+const inp = (err?: string) =>
+  `w-full border rounded-xl px-3.5 py-2.5 bg-white text-[#0B2818] placeholder-[#888] focus:outline-none focus:ring-2 focus:ring-[#1D9E75] focus:border-transparent transition text-sm ${
+    err ? 'border-red-400 bg-red-50' : 'border-[#d4c9b8]'
+  }`
+
 export default function Step4Verification({ data, onChange, onSubmit, onBack, loading, error }: Props) {
   const fileRef = useRef<HTMLInputElement>(null)
-  const [referencePhoneError, setReferencePhoneError] = useState('')
+  const [errors, setErrors] = useState<Record<string, string>>({})
 
-  const handleSubmit = () => {
-    if (!data.referencePhone.trim()) {
-      setReferencePhoneError('Reference contact number is required')
-      return
-    }
-    setReferencePhoneError('')
-    onSubmit()
+  const validate = () => {
+    const e: Record<string, string> = {}
+    if (!data.referenceName.trim())  e.referenceName  = 'Required'
+    if (!data.referencePhone.trim()) e.referencePhone = 'Required'
+    if (!data.referenceAgreed)       e.referenceAgreed = 'Please confirm before continuing'
+    setErrors(e)
+    return Object.keys(e).length === 0
   }
 
   return (
     <div>
-      <h2 className="font-serif text-xl text-[#0B2818] mb-1">Almost there!</h2>
+      <h2 className="font-serif text-xl text-[#0B2818] mb-1">Reference &amp; Verification</h2>
       <p className="text-[#888] text-sm mb-7">
-        Please upload your military ID so we can verify your service. This information is kept strictly private.
+        Almost done! Please upload your military ID and provide a reference who can vouch for you.
       </p>
 
-      {/* File upload */}
+      {/* ── Military ID upload ───────────────────────────────────────────────── */}
       <div
-        className="border-2 border-dashed border-[#d4c9b8] rounded-2xl p-8 text-center cursor-pointer hover:border-[#EF9F27] transition-colors mb-6"
+        className="border-2 border-dashed border-[#d4c9b8] rounded-2xl p-8 text-center cursor-pointer hover:border-[#EF9F27] transition-colors mb-4"
         onClick={() => fileRef.current?.click()}
       >
-        <input ref={fileRef} type="file" accept="image/*,.pdf" className="hidden" onChange={e => onChange({ militaryIdFile: e.target.files?.[0] ?? null })} />
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/*,.pdf"
+          className="hidden"
+          onChange={e => onChange({ militaryIdFile: e.target.files?.[0] ?? null })}
+        />
         {data.militaryIdFile ? (
           <div className="flex flex-col items-center gap-2">
             <div className="w-12 h-12 bg-[#e6f7f1] rounded-full flex items-center justify-center">
@@ -67,24 +78,97 @@ export default function Step4Verification({ data, onChange, onSubmit, onBack, lo
         with host families. It is stored securely and accessible only to our admin team.
       </div>
 
-      {/* Gold divider */}
       <hr className="gold-rule mb-6" />
 
-      {/* Reference phone */}
-      <div className="mb-8">
-        <label className="block text-sm font-semibold text-[#555] mb-1.5">
-          Reference contact number <span className="text-red-500">*</span>
-        </label>
+      {/* ── Reference section ────────────────────────────────────────────────── */}
+      <h3 className="font-serif text-base text-[#0B2818] mb-1">Your reference</h3>
+      <p className="text-[#888] text-sm mb-5">
+        We may reach out to your reference to confirm your application.
+      </p>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-[#555] mb-1.5">Reference Full Name *</label>
+        <input
+          type="text"
+          value={data.referenceName}
+          onChange={e => { onChange({ referenceName: e.target.value }); setErrors(prev => ({ ...prev, referenceName: '' })) }}
+          className={inp(errors.referenceName)}
+          placeholder="Miriam Cohen"
+        />
+        {errors.referenceName && <p className="text-red-500 text-xs mt-1">{errors.referenceName}</p>}
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-[#555] mb-1.5">Reference Phone Number *</label>
         <input
           type="tel"
           value={data.referencePhone}
-          onChange={e => { onChange({ referencePhone: e.target.value }); setReferencePhoneError('') }}
+          onChange={e => { onChange({ referencePhone: e.target.value }); setErrors(prev => ({ ...prev, referencePhone: '' })) }}
+          className={inp(errors.referencePhone)}
           placeholder="+972 50 000 0000"
-          className={`w-full border rounded-xl px-3.5 py-2.5 bg-white text-[#0B2818] placeholder-[#888] text-sm outline-none transition-colors ${
-            referencePhoneError ? 'border-red-400 focus:border-red-500' : 'border-[#d4c9b8] focus:border-[#1D9E75]'
-          }`}
         />
-        {referencePhoneError && <p className="text-red-500 text-xs mt-1">{referencePhoneError}</p>}
+        {errors.referencePhone && <p className="text-red-500 text-xs mt-1">{errors.referencePhone}</p>}
+      </div>
+
+      <div className="mb-5">
+        <label className="block text-sm font-medium text-[#555] mb-1.5">
+          Relationship to You
+          <span className="ml-1 font-normal text-[#888]">(optional)</span>
+        </label>
+        <input
+          type="text"
+          value={data.referenceRelationship}
+          onChange={e => onChange({ referenceRelationship: e.target.value })}
+          className={inp()}
+          placeholder="Officer, teacher, community leader…"
+        />
+      </div>
+
+      {/* Family-member restriction note */}
+      <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-xl p-4 mb-5 text-sm text-amber-800">
+        <span className="text-lg leading-none mt-px shrink-0">⚠</span>
+        <p>
+          <strong>Your reference cannot be a family member</strong> — we need someone who can vouch
+          for you independently.
+        </p>
+      </div>
+
+      {/* Confirmation checkbox */}
+      <label className={`flex items-start gap-3 p-4 rounded-xl border cursor-pointer mb-1 transition-colors ${
+        errors.referenceAgreed
+          ? 'border-red-400 bg-red-50'
+          : data.referenceAgreed
+            ? 'border-[#1D9E75] bg-[#edf7f2]'
+            : 'border-[#d4c9b8]'
+      }`}>
+        <input
+          type="checkbox"
+          checked={data.referenceAgreed}
+          onChange={e => { onChange({ referenceAgreed: e.target.checked }); setErrors(prev => ({ ...prev, referenceAgreed: '' })) }}
+          className="w-4 h-4 mt-0.5 accent-[#1D9E75]"
+        />
+        <span className="text-sm text-[#555] leading-relaxed">
+          I confirm my reference is not a family member and has agreed to be contacted.
+        </span>
+      </label>
+      {errors.referenceAgreed && <p className="text-red-500 text-xs mt-1 mb-4">{errors.referenceAgreed}</p>}
+
+      <hr className="gold-rule mt-6 mb-6" />
+
+      {/* ── Optional extra notes ─────────────────────────────────────────────── */}
+      <div className="mb-8">
+        <label className="block text-sm font-medium text-[#555] mb-1.5">
+          Anything else you&apos;d like us to know?
+          <span className="ml-1 font-normal text-[#888]">(optional)</span>
+        </label>
+        <textarea
+          value={data.additionalNotes}
+          onChange={e => onChange({ additionalNotes: e.target.value })}
+          className={inp()}
+          rows={3}
+          placeholder="Special circumstances, specific needs, anything else on your mind…"
+          style={{ resize: 'vertical' }}
+        />
       </div>
 
       {error && (
@@ -92,13 +176,21 @@ export default function Step4Verification({ data, onChange, onSubmit, onBack, lo
       )}
 
       <div className="flex justify-between">
-        <button onClick={onBack} disabled={loading} className="text-[#888] px-6 py-2.5 rounded-full text-sm font-semibold hover:text-[#555] transition-colors flex items-center gap-2 disabled:opacity-50">
+        <button
+          onClick={onBack}
+          disabled={loading}
+          className="text-[#888] px-6 py-2.5 rounded-full text-sm font-semibold hover:text-[#555] transition-colors flex items-center gap-2 disabled:opacity-50"
+        >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
           Back
         </button>
-        <button onClick={handleSubmit} disabled={loading} className="bg-[#0F3D2E] text-white px-8 py-2.5 rounded-full text-sm font-semibold hover:bg-[#1D9E75] transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2">
+        <button
+          onClick={() => { if (validate()) onSubmit() }}
+          disabled={loading}
+          className="bg-[#0F3D2E] text-white px-8 py-2.5 rounded-full text-sm font-semibold hover:bg-[#1D9E75] transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
+        >
           {loading ? (
             <>
               <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
