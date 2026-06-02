@@ -58,6 +58,9 @@ CREATE TABLE host_families (
   living_situation TEXT,
   available_space TEXT,
 
+  -- Step 2: Household (extra preferences)
+  soldier_gender_preference TEXT,
+
   -- Step 3: Offerings
   can_offer_room       BOOLEAN DEFAULT FALSE,
   can_offer_meals      BOOLEAN DEFAULT FALSE,

@@ -23,15 +23,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         Using inline styles so no Tailwind purge can strip them.
       */}
       <body className={`${inter.className} antialiased`}>
-        <div
-          style={{
-            maxWidth: 430,
-            width: '100%',
-            margin: '0 auto',
-            backgroundColor: '#F9F6F0',
-            minHeight: '100vh',
-          }}
-        >
+        {/* .app-frame is defined in globals.css — 440px on mobile, 680px on desktop ≥768px */}
+        <div className="app-frame">
           {children}
         </div>
       </body>

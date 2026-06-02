@@ -30,3 +30,26 @@
   margin-left: auto;
   margin-right: auto;
 }
+
+/* ── Responsive app frame ─────────────────────────────────────────────────── */
+/* Mobile-first: narrow column. On desktop (≥768px) widens to 680px.         */
+.app-frame {
+  width: 100%;
+  background-color: #F9F6F0;
+  min-height: 100vh;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 440px;
+}
+
+/* ── Home page responsive tokens ──────────────────────────────────────────── */
+.home-logo    { width: 80px;  height: 80px; }
+.home-heading { font-size: 16px; line-height: 1.35; }
+.home-cards   { display: flex; flex-direction: column; gap: 12px; }
+
+@media (min-width: 768px) {
+  .app-frame    { max-width: 680px; }
+  .home-logo    { width: 100px; height: 100px; }
+  .home-heading { font-size: 26px; line-height: 1.25; }
+  .home-cards   { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+}

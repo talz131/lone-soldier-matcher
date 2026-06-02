@@ -47,23 +47,23 @@ export default function Home() {
       {/* Page content — always in DOM; fades + staggers in after intro */}
       <div className="min-h-screen bg-[#F9F6F0] flex flex-col">
         <div className="flex-1 flex items-center justify-center px-4 py-6">
-          <div className="w-full max-w-sm">
+          <div className="w-full">
 
             {/* 0 — Logo */}
             <div className="flex justify-center mb-4" style={fadeUp(0, visible)}>
               <Image
                 src="/logo.png"
                 alt="Lone Soldier Matcher"
-                width={80}
-                height={80}
-                className="rounded-full shadow-md"
+                width={100}
+                height={100}
+                className="home-logo rounded-full shadow-md"
                 priority
               />
             </div>
 
             {/* 1 — Headline */}
             <div className="text-center mb-3" style={fadeUp(1, visible)}>
-              <h1 className="font-serif text-base text-[#0B2818] leading-snug">
+              <h1 className="font-serif home-heading text-[#0B2818]">
                 No soldier should feel<br />
                 <span className="text-[#1D9E75]">alone</span> away from home.
               </h1>
@@ -82,8 +82,8 @@ export default function Home() {
               </p>
             </div>
 
-            {/* 4 — Lone Soldier card */}
-            <div className="mb-3" style={fadeUp(4, visible)}>
+            {/* 4+5 — Cards (stacked on mobile, 2-col grid on desktop) */}
+            <div className="home-cards mb-4" style={fadeUp(4, visible)}>
               <Link href="/soldier" className="group block">
                 <div className="bg-white rounded-2xl p-4 border border-[#e8e0d4] group-hover:border-[#1D9E75] group-hover:shadow-sm transition-all duration-200 flex items-center gap-3">
                   <div className="w-10 h-10 bg-[#e6f7f1] rounded-xl flex items-center justify-center shrink-0">
@@ -104,10 +104,7 @@ export default function Home() {
                   </div>
                 </div>
               </Link>
-            </div>
 
-            {/* 5 — Host Family card */}
-            <div className="mb-6" style={fadeUp(5, visible)}>
               <Link href="/family" className="group block">
                 <div className="bg-white rounded-2xl p-4 border border-[#e8e0d4] group-hover:border-[#534AB7] group-hover:shadow-sm transition-all duration-200 flex items-center gap-3">
                   <div className="w-10 h-10 bg-[#eeedf8] rounded-xl flex items-center justify-center shrink-0">
@@ -128,10 +125,10 @@ export default function Home() {
                   </div>
                 </div>
               </Link>
-            </div>
+            </div>{/* end home-cards */}
 
-            {/* 6 — Admin link */}
-            <div className="text-center" style={fadeUp(6, visible)}>
+            {/* 5 — Admin link */}
+            <div className="text-center" style={fadeUp(5, visible)}>
               <Link href="/admin/login" className="text-xs text-[#888] hover:text-[#555] transition-colors">
                 Admin
               </Link>
