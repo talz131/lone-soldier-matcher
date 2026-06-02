@@ -4,8 +4,7 @@
 
 @layer base {
   body {
-    /* Darker band visible on desktop outside the centered column */
-    background-color: #E8E4DC;
+    background-color: #F9F6F0;
     color: #555;
   }
 }
@@ -35,7 +34,6 @@
 /* Mobile-first: narrow column. On desktop (≥768px) widens to 680px.         */
 .app-frame {
   width: 100%;
-  background-color: #F9F6F0;
   min-height: 100vh;
   margin-left: auto;
   margin-right: auto;
@@ -51,5 +49,9 @@
   .app-frame    { max-width: 680px; }
   .home-logo    { width: 100px; height: 100px; }
   .home-heading { font-size: 26px; line-height: 1.25; }
-  .home-cards   { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .home-cards   { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: stretch; }
+
+  /* Make both cards stretch to equal height */
+  .home-cards > a           { display: flex; flex-direction: column; height: 100%; }
+  .home-cards > a > div     { flex: 1; }
 }
