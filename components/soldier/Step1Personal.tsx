@@ -84,7 +84,6 @@ export default function Step1Personal({ data, onChange, onNext }: Props) {
             { value: 'male', label: 'Male' },
             { value: 'female', label: 'Female' },
             { value: 'other', label: 'Other' },
-            { value: 'prefer_not_to_say', label: 'Prefer not to say' },
           ].map(opt => (
             <button key={opt.value} type="button" onClick={() => onChange({ gender: opt.value })}
               className={`py-2.5 px-3 rounded-xl border text-sm font-medium transition-all text-left ${
