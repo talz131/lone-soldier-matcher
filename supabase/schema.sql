@@ -111,12 +111,14 @@ ALTER TABLE host_families ENABLE ROW LEVEL SECURITY;
 ALTER TABLE matches      ENABLE ROW LEVEL SECURITY;
 ALTER TABLE flags        ENABLE ROW LEVEL SECURITY;
 
--- Public can register (INSERT only)
+-- Public can register (INSERT only, status locked to 'pending')
+-- WITH CHECK (true) would allow a malicious caller to set status='approved'
+-- directly via the anon key. Restricting to 'pending' closes that hole.
 CREATE POLICY "Public can register as soldier"
-  ON soldiers FOR INSERT WITH CHECK (true);
+  ON soldiers FOR INSERT WITH CHECK (status = 'pending');
 
 CREATE POLICY "Public can register as family"
-  ON host_families FOR INSERT WITH CHECK (true);
+  ON host_families FOR INSERT WITH CHECK (status = 'pending');
 
 -- Authenticated users (admin) can do everything
 CREATE POLICY "Admin full access to soldiers"
