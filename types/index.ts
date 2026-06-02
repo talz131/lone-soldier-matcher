@@ -21,6 +21,7 @@ export type Soldier = {
   status: 'pending' | 'approved' | 'declined' | 'matched'
   admin_notes?: string
   reviewed_at?: string
+  portal_token?: string
 }
 
 export type HostFamily = {

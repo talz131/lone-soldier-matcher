@@ -61,8 +61,14 @@ export default function PendingTab({ onMatchCreated }: Props) {
   const updateSoldier = async (id: string, status: 'approved' | 'declined') => {
     const soldier = soldiers.find(s => s.id === id)
     console.log('[PendingTab] updateSoldier:', id, status, 'email:', soldier?.email)
-    await supabase.from('soldiers').update({ status, admin_notes: notes[id] || null, reviewed_at: new Date().toISOString() }).eq('id', id)
+    const extra = status === 'approved' ? { portal_token: crypto.randomUUID() } : {}
+    await supabase.from('soldiers').update({ status, admin_notes: notes[id] || null, reviewed_at: new Date().toISOString(), ...extra }).eq('id', id)
     if (soldier) await sendEmail(soldier.email, soldier.first_name, 'soldier', status)
+    fetchAll()
+  }
+
+  const generatePortalToken = async (id: string) => {
+    await supabase.from('soldiers').update({ portal_token: crypto.randomUUID() }).eq('id', id)
     fetchAll()
   }
 
@@ -221,6 +227,30 @@ export default function PendingTab({ onMatchCreated }: Props) {
                             <Detail label="Observance Pref." value={s.religious_observance} />
                             <Detail label="Pets OK?" value={s.pets_ok ? 'Yes' : 'No'} />
                             <Detail label="Dietary Restrictions" value={s.has_dietary_restrictions ? s.dietary_details || 'Yes' : 'None'} />
+                          </div>
+                          {/* Portal link */}
+                          <div className="mt-1 rounded-xl border border-[#e8e0d4] bg-white p-3">
+                            <p className="text-xs font-semibold text-[#555] mb-2">🔗 Soldier Portal Link</p>
+                            {s.portal_token ? (
+                              <div className="flex items-center gap-2">
+                                <code className="flex-1 text-xs bg-[#F9F6F0] rounded-lg px-2 py-1.5 text-[#0B2818] overflow-hidden text-ellipsis whitespace-nowrap block">
+                                  {typeof window !== 'undefined' ? `${window.location.origin}/portal/${s.portal_token}` : `/portal/${s.portal_token}`}
+                                </code>
+                                <button
+                                  onClick={() => navigator.clipboard.writeText(`${window.location.origin}/portal/${s.portal_token}`)}
+                                  className="shrink-0 text-xs bg-[#0F3D2E] text-white px-3 py-1.5 rounded-lg hover:bg-[#1D9E75] transition"
+                                >
+                                  Copy
+                                </button>
+                              </div>
+                            ) : (
+                              <button
+                                onClick={() => generatePortalToken(s.id)}
+                                className="text-xs bg-[#EF9F27] text-white px-3 py-1.5 rounded-lg hover:opacity-90 transition"
+                              >
+                                Generate link
+                              </button>
+                            )}
                           </div>
                           <MatchSuggestions
                             soldier={s}
