@@ -118,7 +118,7 @@ export default function AdminDashboard() {
         </div>
 
         <div>
-          {tab === 'pending'  && <PendingTab />}
+          {tab === 'pending'  && <PendingTab onMatchCreated={() => setTab('matches')} />}
           {tab === 'families' && <FamiliesTab />}
           {tab === 'matches'  && <MatchesTab />}
           {tab === 'flags'    && <FlagsTab />}

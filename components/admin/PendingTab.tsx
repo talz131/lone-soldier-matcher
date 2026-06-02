@@ -7,7 +7,12 @@ import MatchSuggestions from './MatchSuggestions'
 
 const adminInp = `w-full border border-[#d4c9b8] rounded-lg px-3 py-2 text-sm bg-white text-[#0B2818] focus:outline-none focus:ring-2 focus:ring-[#0F3D2E] resize-none`
 
-export default function PendingTab() {
+interface Props {
+  /** Called after a match is created so the parent can e.g. switch tabs. */
+  onMatchCreated?: () => void
+}
+
+export default function PendingTab({ onMatchCreated }: Props) {
   const [view, setView] = useState<'soldiers' | 'families'>('soldiers')
   const [soldiers, setSoldiers] = useState<Soldier[]>([])
   const [families, setFamilies] = useState<HostFamily[]>([])
@@ -185,7 +190,10 @@ export default function PendingTab() {
                             <Detail label="Dietary Restrictions" value={s.has_dietary_restrictions ? s.dietary_details || 'Yes' : 'None'} />
                             <Detail label="Military ID" value={s.military_id_url ? '✅ Uploaded' : '❌ Not uploaded'} />
                           </div>
-                          <MatchSuggestions soldier={s} />
+                          <MatchSuggestions
+                            soldier={s}
+                            onMatchCreated={() => { fetchAll(); onMatchCreated?.() }}
+                          />
                         </>
                       )
                     })()}
