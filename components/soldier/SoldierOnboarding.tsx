@@ -12,6 +12,7 @@ import type { SoldierFormData } from '@/types'
 const DEFAULT: SoldierFormData = {
   firstName: '',
   lastName: '',
+  gender: '',
   email: '',
   phone: '',
   whatsappPhone: '',
@@ -63,6 +64,7 @@ export default function SoldierOnboarding() {
       const { error: dbError } = await supabase.from('soldiers').insert({
         first_name: data.firstName,
         last_name: data.lastName,
+        gender: data.gender || null,
         email: data.email,
         phone: data.phone || null,
         whatsapp_phone: data.whatsappPhone || null,

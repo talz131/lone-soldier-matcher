@@ -11,6 +11,7 @@ CREATE TABLE soldiers (
   -- Step 1: Personal Info
   first_name      TEXT NOT NULL,
   last_name       TEXT NOT NULL,
+  gender          TEXT,
   email           TEXT NOT NULL,
   phone           TEXT,
   date_of_birth   DATE,

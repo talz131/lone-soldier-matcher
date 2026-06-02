@@ -21,6 +21,7 @@ export default function Step1Personal({ data, onChange, onNext }: Props) {
     const e: Record<string, string> = {}
     if (!data.firstName.trim()) e.firstName = 'Required'
     if (!data.lastName.trim()) e.lastName = 'Required'
+    if (!data.gender) e.gender = 'Required'
     if (!data.email.trim()) e.email = 'Required'
     else if (!/\S+@\S+\.\S+/.test(data.email)) e.email = 'Enter a valid email'
     if (!data.phone.trim()) e.phone = 'Required'
@@ -44,6 +45,29 @@ export default function Step1Personal({ data, onChange, onNext }: Props) {
           <input type="text" value={data.lastName} onChange={e => onChange({ lastName: e.target.value })} className={inp(errors.lastName)} placeholder="Cohen" />
           {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
         </div>
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-[#555] mb-1.5">Gender *</label>
+        <div className="grid grid-cols-2 gap-2">
+          {[
+            { value: 'male', label: 'Male' },
+            { value: 'female', label: 'Female' },
+            { value: 'other', label: 'Other' },
+            { value: 'prefer_not_to_say', label: 'Prefer not to say' },
+          ].map(opt => (
+            <button key={opt.value} type="button" onClick={() => onChange({ gender: opt.value })}
+              className={`py-2.5 px-3 rounded-xl border text-sm font-medium transition-all text-left ${
+                data.gender === opt.value
+                  ? 'bg-[#0F3D2E] border-[#0F3D2E] text-white'
+                  : errors.gender
+                    ? 'border-red-300 text-[#555] hover:border-[#1D9E75]'
+                    : 'border-[#d4c9b8] text-[#555] hover:border-[#1D9E75]'
+              }`}
+            >{opt.label}</button>
+          ))}
+        </div>
+        {errors.gender && <p className="text-red-500 text-xs mt-1">{errors.gender}</p>}
       </div>
 
       <div className="mb-4">
