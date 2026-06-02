@@ -135,13 +135,40 @@ export default function SoldierOnboarding() {
 
       if (data.militaryIdFile) {
         const file = data.militaryIdFile
+        const MAX_BYTES = 10 * 1024 * 1024 // 10 MB
+
+        console.log('[upload] Attempting military ID upload:', {
+          name: file.name,
+          sizeMB: (file.size / 1024 / 1024).toFixed(2),
+          type: file.type,
+        })
+        console.log('[upload] Storage policy: bucket=military-ids, anon INSERT allowed via "Anyone can upload military ID" RLS policy (WITH CHECK bucket_id = \'military-ids\')')
+
+        if (file.size > MAX_BYTES) {
+          throw new Error(`File is too large (${(file.size / 1024 / 1024).toFixed(1)} MB). Maximum allowed size is 10 MB.`)
+        }
+
         const fileName = `${Date.now()}_${file.name.replace(/\s+/g, '_')}`
+        console.log('[upload] Uploading as:', fileName)
+
         const { data: upload, error: uploadError } = await supabase.storage
           .from('military-ids')
           .upload(fileName, file)
-        if (uploadError) throw uploadError
-        if (upload) militaryIdUrl = upload.path
+
+        if (uploadError) {
+          console.error('[upload] Supabase Storage error:')
+          console.error('  message:', uploadError.message)
+          console.error('  name:', uploadError.name)
+          console.error('  statusCode:', (uploadError as unknown as Record<string, unknown>).statusCode)
+          console.error('  full error:', JSON.stringify(uploadError))
+          throw new Error(`File upload failed: ${uploadError.message}`)
+        }
+
+        militaryIdUrl = upload.path
+        console.log('[upload] Upload succeeded, path:', militaryIdUrl)
       }
+
+      console.log('[submit] Inserting soldier row, militaryIdUrl:', militaryIdUrl)
 
       const { error: dbError } = await supabase.from('soldiers').insert({
         first_name: data.firstName,
@@ -169,12 +196,24 @@ export default function SoldierOnboarding() {
         additional_notes: data.additionalNotes || null,
       })
 
-      if (dbError) throw dbError
+      if (dbError) {
+        console.error('[submit] Supabase DB insert error:')
+        console.error('  message:', dbError.message)
+        console.error('  code:', dbError.code)
+        console.error('  details:', dbError.details)
+        console.error('  hint:', dbError.hint)
+        throw new Error(`Submission failed: ${dbError.message}`)
+      }
+
+      console.log('[submit] Row inserted successfully')
       clearDraft()
       setSubmitted(true)
     } catch (err) {
-      console.error(err)
-      setError('Something went wrong. Please try again or contact us directly.')
+      const msg = err instanceof Error ? err.message : 'Unknown error'
+      console.error('[submit] Caught error:', msg, err)
+      setError(msg.startsWith('File') || msg.startsWith('File upload') || msg.startsWith('Submission')
+        ? msg
+        : 'Something went wrong. Please try again or contact us directly.')
     } finally {
       setLoading(false)
     }

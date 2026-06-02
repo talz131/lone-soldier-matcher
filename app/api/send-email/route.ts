@@ -163,6 +163,11 @@ export async function POST(request: Request) {
       : status === 'declined' && entityType === 'soldier' ? declineSoldierHtml(name)
       : declineFamilyHtml(name)
 
+    // Warn about sandbox restriction before attempting send
+    if (FROM === 'onboarding@resend.dev') {
+      console.warn('[send-email] WARNING: Using onboarding@resend.dev (Resend sandbox). Emails will ONLY deliver to the verified Resend account email. Set EMAIL_FROM to a verified domain address to send to all recipients.')
+    }
+
     const { data, error } = await resend.emails.send({
       from: FROM,
       to: email,
@@ -171,8 +176,26 @@ export async function POST(request: Request) {
     })
 
     if (error) {
-      console.error('[send-email] Resend error:', JSON.stringify(error))
-      return NextResponse.json({ error }, { status: 500 })
+      // Resend error objects are plain POJOs with statusCode, name, message
+      // but JSON.stringify can silently produce {} if the shape is unexpected,
+      // so we extract fields explicitly.
+      const errStatusCode = (error as Record<string, unknown>).statusCode
+      const errName       = (error as Record<string, unknown>).name
+      const errMessage    = (error as Record<string, unknown>).message
+      console.error('[send-email] Resend rejected the send request:')
+      console.error('  to:', email)
+      console.error('  statusCode:', errStatusCode)
+      console.error('  name:', errName)
+      console.error('  message:', errMessage)
+      console.error('  raw:', JSON.stringify(error))
+
+      if (FROM === 'onboarding@resend.dev' || String(errMessage).includes('testing emails')) {
+        console.error('[send-email] ROOT CAUSE: Resend sandbox (onboarding@resend.dev) only delivers to your verified Resend account email. To fix: verify a domain at resend.com/domains and set EMAIL_FROM to a sender on that domain.')
+      }
+
+      return NextResponse.json({
+        error: { statusCode: errStatusCode, name: errName, message: errMessage },
+      }, { status: 500 })
     }
 
     console.log('[send-email] Sent OK, id:', data?.id)
