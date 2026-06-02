@@ -21,10 +21,13 @@ export default function Step4Verification({ data, onChange, onSubmit, onBack, lo
   const fileRef = useRef<HTMLInputElement>(null)
   const [errors, setErrors] = useState<Record<string, string>>({})
 
+  const isValidPhone = (v: string) => /^05\d{8}$/.test(v)
+
   const validate = () => {
     const e: Record<string, string> = {}
     if (!data.referenceName.trim())  e.referenceName  = 'Required'
     if (!data.referencePhone.trim()) e.referencePhone = 'Required'
+    else if (!isValidPhone(data.referencePhone)) e.referencePhone = 'Please enter a valid Israeli mobile number starting with 05'
     setErrors(e)
     return Object.keys(e).length === 0
   }
@@ -92,7 +95,6 @@ export default function Step4Verification({ data, onChange, onSubmit, onBack, lo
           value={data.referenceName}
           onChange={e => { onChange({ referenceName: e.target.value }); setErrors(prev => ({ ...prev, referenceName: '' })) }}
           className={inp(errors.referenceName)}
-          placeholder="Miriam Cohen"
         />
         {errors.referenceName && <p className="text-red-500 text-xs mt-1">{errors.referenceName}</p>}
       </div>
@@ -102,9 +104,9 @@ export default function Step4Verification({ data, onChange, onSubmit, onBack, lo
         <input
           type="tel"
           value={data.referencePhone}
-          onChange={e => { onChange({ referencePhone: e.target.value }); setErrors(prev => ({ ...prev, referencePhone: '' })) }}
+          onChange={e => { onChange({ referencePhone: e.target.value.replace(/\D/g, '') }); setErrors(prev => ({ ...prev, referencePhone: '' })) }}
           className={inp(errors.referencePhone)}
-          placeholder="+972 50 000 0000"
+          maxLength={10}
         />
         {errors.referencePhone && <p className="text-red-500 text-xs mt-1">{errors.referencePhone}</p>}
       </div>
@@ -119,7 +121,7 @@ export default function Step4Verification({ data, onChange, onSubmit, onBack, lo
           value={data.referenceRelationship}
           onChange={e => onChange({ referenceRelationship: e.target.value })}
           className={inp()}
-          placeholder="Officer, teacher, community leader…"
+          placeholder=""
         />
       </div>
 
@@ -145,7 +147,7 @@ export default function Step4Verification({ data, onChange, onSubmit, onBack, lo
           onChange={e => onChange({ additionalNotes: e.target.value })}
           className={inp()}
           rows={3}
-          placeholder="Special circumstances, specific needs, anything else on your mind…"
+          placeholder=""
           style={{ resize: 'vertical' }}
         />
       </div>

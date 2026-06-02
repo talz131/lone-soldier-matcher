@@ -26,7 +26,7 @@ export default function Step2Situation({ data, onChange, onNext, onBack }: Props
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-[#555] mb-1.5">Unit / Role (optional)</label>
-        <input type="text" value={data.unit} onChange={e => onChange({ unit: e.target.value })} className={inp} placeholder="e.g. Golani, Paratroopers, Intelligence..." />
+        <input type="text" value={data.unit} onChange={e => onChange({ unit: e.target.value })} className={inp} placeholder="" />
       </div>
 
       <div className="mb-6">

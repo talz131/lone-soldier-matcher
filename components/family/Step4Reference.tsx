@@ -20,10 +20,13 @@ const inp = (err?: string) =>
 export default function Step4Reference({ data, onChange, onSubmit, onBack, loading, error }: Props) {
   const [errors, setErrors] = useState<Record<string, string>>({})
 
+  const isValidPhone = (v: string) => /^05\d{8}$/.test(v)
+
   const validate = () => {
     const e: Record<string, string> = {}
     if (!data.referenceName.trim()) e.referenceName = 'Required'
     if (!data.referencePhone.trim()) e.referencePhone = 'Required'
+    else if (!isValidPhone(data.referencePhone)) e.referencePhone = 'Please enter a valid Israeli mobile number starting with 05'
     if (!data.agreedToTerms) e.terms = 'Please agree to continue'
     setErrors(e)
     return Object.keys(e).length === 0
@@ -38,19 +41,19 @@ export default function Step4Reference({ data, onChange, onSubmit, onBack, loadi
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-[#555] mb-1.5">Reference Full Name *</label>
-        <input type="text" value={data.referenceName} onChange={e => onChange({ referenceName: e.target.value })} className={inp(errors.referenceName)} placeholder="Miriam Cohen" />
+        <input type="text" value={data.referenceName} onChange={e => onChange({ referenceName: e.target.value })} className={inp(errors.referenceName)} />
         {errors.referenceName && <p className="text-red-500 text-xs mt-1">{errors.referenceName}</p>}
       </div>
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-[#555] mb-1.5">Reference Phone *</label>
-        <input type="tel" value={data.referencePhone} onChange={e => onChange({ referencePhone: e.target.value })} className={inp(errors.referencePhone)} placeholder="+972 50 000 0000" />
+        <input type="tel" value={data.referencePhone} onChange={e => { onChange({ referencePhone: e.target.value.replace(/\D/g, '') }); setErrors(prev => ({ ...prev, referencePhone: '' })) }} className={inp(errors.referencePhone)} maxLength={10} />
         {errors.referencePhone && <p className="text-red-500 text-xs mt-1">{errors.referencePhone}</p>}
       </div>
 
       <div className="mb-6">
         <label className="block text-sm font-medium text-[#555] mb-1.5">Relationship to Your Family</label>
-        <input type="text" value={data.referenceRelationship} onChange={e => onChange({ referenceRelationship: e.target.value })} className={inp()} placeholder="Rabbi, neighbor, community leader..." />
+        <input type="text" value={data.referenceRelationship} onChange={e => onChange({ referenceRelationship: e.target.value })} className={inp()} />
       </div>
 
       {/* Gold divider */}

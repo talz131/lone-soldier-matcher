@@ -17,6 +17,8 @@ const inp = (err?: string) =>
 export default function Step1Personal({ data, onChange, onNext }: Props) {
   const [errors, setErrors] = useState<Record<string, string>>({})
 
+  const isValidPhone = (v: string) => /^05\d{8}$/.test(v)
+
   const validate = () => {
     const e: Record<string, string> = {}
     if (!data.firstName.trim()) e.firstName = 'Required'
@@ -25,6 +27,8 @@ export default function Step1Personal({ data, onChange, onNext }: Props) {
     if (!data.email.trim()) e.email = 'Required'
     else if (!/\S+@\S+\.\S+/.test(data.email)) e.email = 'Enter a valid email'
     if (!data.phone.trim()) e.phone = 'Required'
+    else if (!isValidPhone(data.phone)) e.phone = 'Please enter a valid Israeli mobile number starting with 05'
+    if (data.whatsappPhone.trim() && !isValidPhone(data.whatsappPhone)) e.whatsappPhone = 'Please enter a valid Israeli mobile number starting with 05'
     setErrors(e)
     return Object.keys(e).length === 0
   }
@@ -37,25 +41,25 @@ export default function Step1Personal({ data, onChange, onNext }: Props) {
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
           <label className="block text-sm font-medium text-[#555] mb-1.5">First Name *</label>
-          <input type="text" value={data.firstName} onChange={e => onChange({ firstName: e.target.value })} className={inp(errors.firstName)} placeholder="Yoni" />
+          <input type="text" value={data.firstName} onChange={e => onChange({ firstName: e.target.value })} className={inp(errors.firstName)} />
           {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
         </div>
         <div>
           <label className="block text-sm font-medium text-[#555] mb-1.5">Last Name *</label>
-          <input type="text" value={data.lastName} onChange={e => onChange({ lastName: e.target.value })} className={inp(errors.lastName)} placeholder="Cohen" />
+          <input type="text" value={data.lastName} onChange={e => onChange({ lastName: e.target.value })} className={inp(errors.lastName)} />
           {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
         </div>
       </div>
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-[#555] mb-1.5">Email Address *</label>
-        <input type="email" value={data.email} onChange={e => onChange({ email: e.target.value })} className={inp(errors.email)} placeholder="yoni@example.com" />
+        <input type="email" value={data.email} onChange={e => onChange({ email: e.target.value })} className={inp(errors.email)} />
         {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
       </div>
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-[#555] mb-1.5">Israeli Phone Number *</label>
-        <input type="tel" value={data.phone} onChange={e => onChange({ phone: e.target.value })} className={inp(errors.phone)} placeholder="+972 50 000 0000" />
+        <input type="tel" value={data.phone} onChange={e => { onChange({ phone: e.target.value.replace(/\D/g, '') }); setErrors(prev => ({ ...prev, phone: '' })) }} className={inp(errors.phone)} maxLength={10} />
         {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
       </div>
 
@@ -64,7 +68,8 @@ export default function Step1Personal({ data, onChange, onNext }: Props) {
           WhatsApp Number
           <span className="ml-1 font-normal text-[#888]">(if different)</span>
         </label>
-        <input type="tel" value={data.whatsappPhone} onChange={e => onChange({ whatsappPhone: e.target.value })} className={inp()} placeholder="+1 212 000 0000" />
+        <input type="tel" value={data.whatsappPhone} onChange={e => { onChange({ whatsappPhone: e.target.value.replace(/\D/g, '') }); setErrors(prev => ({ ...prev, whatsappPhone: '' })) }} className={inp(errors.whatsappPhone)} maxLength={10} />
+        {errors.whatsappPhone && <p className="text-red-500 text-xs mt-1">{errors.whatsappPhone}</p>}
       </div>
 
       <div className="mb-4">
@@ -74,7 +79,7 @@ export default function Step1Personal({ data, onChange, onNext }: Props) {
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-[#555] mb-1.5">Country of Origin</label>
-        <input type="text" value={data.countryOfOrigin} onChange={e => onChange({ countryOfOrigin: e.target.value })} className={inp()} placeholder="United States" />
+        <input type="text" value={data.countryOfOrigin} onChange={e => onChange({ countryOfOrigin: e.target.value })} className={inp()} />
       </div>
 
       <div className="mb-8">

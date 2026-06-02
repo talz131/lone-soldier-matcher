@@ -53,7 +53,7 @@ export default function Step2Household({ data, onChange, onNext, onBack }: Props
           ))}
         </div>
         {data.hasChildren && (
-          <input type="text" value={data.childrenAges} onChange={e => onChange({ childrenAges: e.target.value })} className={inp} placeholder="Ages (e.g. 5, 8, 14)" />
+          <input type="text" value={data.childrenAges} onChange={e => onChange({ childrenAges: e.target.value })} className={inp} placeholder="" />
         )}
       </div>
 

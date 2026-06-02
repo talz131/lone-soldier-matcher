@@ -89,7 +89,7 @@ export default function Step3Offerings({ data, onChange, onNext, onBack }: Props
 
       <div className="mb-8">
         <label className="block text-sm font-medium text-[#555] mb-1.5">Anything else you&apos;d like to share?</label>
-        <textarea value={data.additionalNotes} onChange={e => onChange({ additionalNotes: e.target.value })} className={inp} rows={3} placeholder="Tell us a bit about your family, your home, or what you hope to give a soldier..." />
+        <textarea value={data.additionalNotes} onChange={e => onChange({ additionalNotes: e.target.value })} className={inp} rows={3} placeholder="" />
       </div>
 
       <div className="flex justify-between">

@@ -43,7 +43,7 @@ export default function Step3Preferences({ data, onChange, onNext, onBack }: Pro
       <div className="mb-6">
         <label className="block text-sm font-medium text-[#555] mb-1">Preferred location</label>
         <p className="text-xs text-[#888] mb-2">Where would you ideally be hosted? This helps us find a family nearby.</p>
-        <input type="text" value={data.baseLocation} onChange={e => onChange({ baseLocation: e.target.value })} className={inp} placeholder="e.g. Tel Aviv, Jerusalem, Raanana..." />
+        <input type="text" value={data.baseLocation} onChange={e => onChange({ baseLocation: e.target.value })} className={inp} placeholder="" />
       </div>
 
       <div className="mb-6">
@@ -113,7 +113,7 @@ export default function Step3Preferences({ data, onChange, onNext, onBack }: Pro
           ))}
         </div>
         {data.hasDietaryRestrictions && (
-          <textarea value={data.dietaryDetails} onChange={e => onChange({ dietaryDetails: e.target.value })} className={inp} rows={2} placeholder="e.g. kosher, vegetarian, allergic to nuts..." />
+          <textarea value={data.dietaryDetails} onChange={e => onChange({ dietaryDetails: e.target.value })} className={inp} rows={2} placeholder="" />
         )}
       </div>
 

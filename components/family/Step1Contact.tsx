@@ -17,12 +17,15 @@ const inp = (err?: string) =>
 export default function Step1Contact({ data, onChange, onNext }: Props) {
   const [errors, setErrors] = useState<Record<string, string>>({})
 
+  const isValidPhone = (v: string) => /^05\d{8}$/.test(v)
+
   const validate = () => {
     const e: Record<string, string> = {}
     if (!data.contactName.trim()) e.contactName = 'Required'
     if (!data.email.trim()) e.email = 'Required'
     else if (!/\S+@\S+\.\S+/.test(data.email)) e.email = 'Enter a valid email'
     if (!data.phone.trim()) e.phone = 'Required'
+    else if (!isValidPhone(data.phone)) e.phone = 'Please enter a valid Israeli mobile number starting with 05'
     setErrors(e)
     return Object.keys(e).length === 0
   }
@@ -34,30 +37,30 @@ export default function Step1Contact({ data, onChange, onNext }: Props) {
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-[#555] mb-1.5">Full Name *</label>
-        <input type="text" value={data.contactName} onChange={e => onChange({ contactName: e.target.value })} className={inp(errors.contactName)} placeholder="Rachel & David Levi" />
+        <input type="text" value={data.contactName} onChange={e => onChange({ contactName: e.target.value })} className={inp(errors.contactName)} />
         {errors.contactName && <p className="text-red-500 text-xs mt-1">{errors.contactName}</p>}
       </div>
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-[#555] mb-1.5">Email Address *</label>
-        <input type="email" value={data.email} onChange={e => onChange({ email: e.target.value })} className={inp(errors.email)} placeholder="family@example.com" />
+        <input type="email" value={data.email} onChange={e => onChange({ email: e.target.value })} className={inp(errors.email)} />
         {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
       </div>
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-[#555] mb-1.5">Phone Number *</label>
-        <input type="tel" value={data.phone} onChange={e => onChange({ phone: e.target.value })} className={inp(errors.phone)} placeholder="+972 50 000 0000" />
+        <input type="tel" value={data.phone} onChange={e => { onChange({ phone: e.target.value.replace(/\D/g, '') }); setErrors(prev => ({ ...prev, phone: '' })) }} className={inp(errors.phone)} maxLength={10} />
         {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
       </div>
 
       <div className="grid grid-cols-2 gap-4 mb-8">
         <div>
           <label className="block text-sm font-medium text-[#555] mb-1.5">City *</label>
-          <input type="text" value={data.city} onChange={e => onChange({ city: e.target.value })} className={inp()} placeholder="Tel Aviv" />
+          <input type="text" value={data.city} onChange={e => onChange({ city: e.target.value })} className={inp()} />
         </div>
         <div>
           <label className="block text-sm font-medium text-[#555] mb-1.5">Neighborhood</label>
-          <input type="text" value={data.neighborhood} onChange={e => onChange({ neighborhood: e.target.value })} className={inp()} placeholder="Florentin" />
+          <input type="text" value={data.neighborhood} onChange={e => onChange({ neighborhood: e.target.value })} className={inp()} />
         </div>
       </div>
 
