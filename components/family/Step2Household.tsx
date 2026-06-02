@@ -9,6 +9,13 @@ type Props = {
   onBack: () => void
 }
 
+const LANGUAGES = [
+  'English', 'Hebrew', 'French', 'Spanish', 'Russian', 'Arabic', 'Amharic', 'Yiddish', 'Portuguese', 'Other',
+]
+
+const toggleItem = (list: string[], item: string) =>
+  list.includes(item) ? list.filter(l => l !== item) : [...list, item]
+
 const inp = `w-full border border-[#d4c9b8] rounded-xl px-3.5 py-2.5 bg-white text-[#0B2818] text-sm focus:outline-none focus:ring-2 focus:ring-[#534AB7] focus:border-transparent transition`
 
 export default function Step2Household({ data, onChange, onNext, onBack }: Props) {
@@ -84,6 +91,23 @@ export default function Step2Household({ data, onChange, onNext, onBack }: Props
                   : 'border-[#d4c9b8] text-[#555] hover:border-[#534AB7]'
               }`}
             >{opt.label}</button>
+          ))}
+        </div>
+      </div>
+
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-[#555] mb-2">
+          Languages spoken at home
+        </label>
+        <div className="flex flex-wrap gap-2">
+          {LANGUAGES.map(lang => (
+            <button key={lang} type="button" onClick={() => onChange({ languages: toggleItem(data.languages, lang) })}
+              className={`px-3.5 py-1.5 rounded-full border text-sm font-medium transition-all ${
+                data.languages.includes(lang)
+                  ? 'bg-[#0F3D2E] border-[#0F3D2E] text-white'
+                  : 'border-[#d4c9b8] text-[#555] hover:border-[#534AB7]'
+              }`}
+            >{lang}</button>
           ))}
         </div>
       </div>

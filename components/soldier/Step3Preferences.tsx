@@ -41,6 +41,12 @@ export default function Step3Preferences({ data, onChange, onNext, onBack }: Pro
       </p>
 
       <div className="mb-6">
+        <label className="block text-sm font-medium text-[#555] mb-1">Preferred location</label>
+        <p className="text-xs text-[#888] mb-2">Where would you ideally be hosted? This helps us find a family nearby.</p>
+        <input type="text" value={data.baseLocation} onChange={e => onChange({ baseLocation: e.target.value })} className={inp} placeholder="e.g. Tel Aviv, Jerusalem, Raanana..." />
+      </div>
+
+      <div className="mb-6">
         <label className="block text-sm font-medium text-[#555] mb-2">Religious preferences</label>
         <div className="flex flex-wrap gap-2">
           {OBSERVANCE.map(opt => (

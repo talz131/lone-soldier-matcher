@@ -9,14 +9,8 @@ type Props = {
   onBack: () => void
 }
 
-const BASES = [
-  'Tel HaShomer', 'Bahad 1 (Mitzpe Ramon)', 'Kirya (Tel Aviv)', 'Ramat David',
-  'Nevatim', 'Hatzerim', 'Palmachim', 'Sde Dov', 'Julis', 'Michve Alon',
-  'Camp Rabin (Petah Tikva)', 'Other',
-]
-
 const LANGUAGES = [
-  'English', 'French', 'Russian', 'Spanish', 'Amharic', 'Arabic', 'Portuguese', 'Yiddish', 'Other',
+  'English', 'Hebrew', 'French', 'Spanish', 'Russian', 'Arabic', 'Amharic', 'Yiddish', 'Portuguese', 'Other',
 ]
 
 const inp = `w-full border border-[#d4c9b8] rounded-xl px-3.5 py-2.5 bg-white text-[#0B2818] text-sm focus:outline-none focus:ring-2 focus:ring-[#1D9E75] focus:border-transparent transition`
@@ -29,14 +23,6 @@ export default function Step2Situation({ data, onChange, onNext, onBack }: Props
     <div>
       <h2 className="font-serif text-xl text-[#0B2818] mb-1">Your service situation</h2>
       <p className="text-[#888] text-sm mb-7">Help us understand your life in uniform.</p>
-
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-[#555] mb-1.5">Base / Location</label>
-        <select value={data.baseLocation} onChange={e => onChange({ baseLocation: e.target.value })} className={inp}>
-          <option value="">Select your base...</option>
-          {BASES.map(b => <option key={b} value={b}>{b}</option>)}
-        </select>
-      </div>
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-[#555] mb-1.5">Unit / Role (optional)</label>
