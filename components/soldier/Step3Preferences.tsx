@@ -21,9 +21,7 @@ const VIBES = [
 const OBSERVANCE = [
   { value: 'hiloni', label: 'Hiloni' },
   { value: 'traditional', label: 'Traditional' },
-  { value: 'dati', label: 'Dati' },
-  { value: 'sefardi', label: 'Sefardi' },
-  { value: 'ashkenazi', label: 'Ashkenazi' },
+  { value: 'dati_leumi', label: 'Dati Leumi' },
   { value: 'haredi', label: 'Haredi' },
   { value: 'chabad', label: 'Chabad' },
   { value: 'no_preference', label: 'No preference' },
@@ -43,7 +41,7 @@ export default function Step3Preferences({ data, onChange, onNext, onBack }: Pro
       </p>
 
       <div className="mb-6">
-        <label className="block text-sm font-medium text-[#555] mb-2">Preferred family observance level</label>
+        <label className="block text-sm font-medium text-[#555] mb-2">Religious preferences</label>
         <div className="flex flex-wrap gap-2">
           {OBSERVANCE.map(opt => (
             <button key={opt.value} type="button" onClick={() => onChange({ religiousObservance: opt.value })}

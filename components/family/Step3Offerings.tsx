@@ -18,10 +18,12 @@ const HOSTING_OPTIONS = [
 ]
 
 const OBSERVANCE = [
-  { value: 'hiloni', label: 'Hiloni (secular)' },
+  { value: 'hiloni', label: 'Hiloni' },
   { value: 'traditional', label: 'Traditional' },
+  { value: 'dati_leumi', label: 'Dati Leumi' },
+  { value: 'haredi', label: 'Haredi' },
   { value: 'chabad', label: 'Chabad' },
-  { value: 'dati', label: 'Dati (religious)' },
+  { value: 'no_preference', label: 'No preference' },
 ]
 
 export default function Step3Offerings({ data, onChange, onNext, onBack }: Props) {
@@ -56,7 +58,7 @@ export default function Step3Offerings({ data, onChange, onNext, onBack }: Props
       </div>
 
       <div className="mb-6">
-        <label className="block text-sm font-medium text-[#555] mb-2">Our family observance level</label>
+        <label className="block text-sm font-medium text-[#555] mb-2">Religious affiliation</label>
         <div className="flex flex-wrap gap-2">
           {OBSERVANCE.map(opt => (
             <button key={opt.value} type="button" onClick={() => onChange({ religiousObservance: opt.value })}

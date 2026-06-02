@@ -23,6 +23,7 @@ export default function Step1Personal({ data, onChange, onNext }: Props) {
     if (!data.lastName.trim()) e.lastName = 'Required'
     if (!data.email.trim()) e.email = 'Required'
     else if (!/\S+@\S+\.\S+/.test(data.email)) e.email = 'Enter a valid email'
+    if (!data.phone.trim()) e.phone = 'Required'
     setErrors(e)
     return Object.keys(e).length === 0
   }
@@ -52,8 +53,9 @@ export default function Step1Personal({ data, onChange, onNext }: Props) {
       </div>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium text-[#555] mb-1.5">Israeli Phone Number</label>
-        <input type="tel" value={data.phone} onChange={e => onChange({ phone: e.target.value })} className={inp()} placeholder="+972 50 000 0000" />
+        <label className="block text-sm font-medium text-[#555] mb-1.5">Israeli Phone Number *</label>
+        <input type="tel" value={data.phone} onChange={e => onChange({ phone: e.target.value })} className={inp(errors.phone)} placeholder="+972 50 000 0000" />
+        {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
       </div>
 
       <div className="mb-4">
