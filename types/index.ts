@@ -116,6 +116,7 @@ export type FamilyFormData = {
   livingSituation: string
   availableSpace: string
   hostingType: string
+  languages: string[]
   religiousObservance: string
   pets: string
   additionalNotes: string
