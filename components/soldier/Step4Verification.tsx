@@ -25,7 +25,6 @@ export default function Step4Verification({ data, onChange, onSubmit, onBack, lo
     const e: Record<string, string> = {}
     if (!data.referenceName.trim())  e.referenceName  = 'Required'
     if (!data.referencePhone.trim()) e.referencePhone = 'Required'
-    if (!data.referenceAgreed)       e.referenceAgreed = 'Please confirm before continuing'
     setErrors(e)
     return Object.keys(e).length === 0
   }
@@ -132,26 +131,6 @@ export default function Step4Verification({ data, onChange, onSubmit, onBack, lo
           for you independently.
         </p>
       </div>
-
-      {/* Confirmation checkbox */}
-      <label className={`flex items-start gap-3 p-4 rounded-xl border cursor-pointer mb-1 transition-colors ${
-        errors.referenceAgreed
-          ? 'border-red-400 bg-red-50'
-          : data.referenceAgreed
-            ? 'border-[#1D9E75] bg-[#edf7f2]'
-            : 'border-[#d4c9b8]'
-      }`}>
-        <input
-          type="checkbox"
-          checked={data.referenceAgreed}
-          onChange={e => { onChange({ referenceAgreed: e.target.checked }); setErrors(prev => ({ ...prev, referenceAgreed: '' })) }}
-          className="w-4 h-4 mt-0.5 accent-[#1D9E75]"
-        />
-        <span className="text-sm text-[#555] leading-relaxed">
-          I confirm my reference is not a family member and has agreed to be contacted.
-        </span>
-      </label>
-      {errors.referenceAgreed && <p className="text-red-500 text-xs mt-1 mb-4">{errors.referenceAgreed}</p>}
 
       <hr className="gold-rule mt-6 mb-6" />
 
