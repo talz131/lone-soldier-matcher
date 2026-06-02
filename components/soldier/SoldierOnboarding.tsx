@@ -13,14 +13,11 @@ import type { SoldierFormData } from '@/types'
 
 const DRAFT_KEY = 'lsm_soldier_draft'
 
-// File objects can't be JSON-serialised, so we always store militaryIdFile as null.
-type SerializableData = Omit<SoldierFormData, 'militaryIdFile'> & { militaryIdFile: null }
-type Draft = { step: number; data: SerializableData }
+type Draft = { step: number; data: SoldierFormData }
 
 function saveDraft(step: number, data: SoldierFormData) {
   try {
-    const payload: Draft = { step, data: { ...data, militaryIdFile: null } }
-    localStorage.setItem(DRAFT_KEY, JSON.stringify(payload))
+    localStorage.setItem(DRAFT_KEY, JSON.stringify({ step, data }))
   } catch { /* quota errors, private browsing, etc. */ }
 }
 
@@ -67,7 +64,6 @@ const DEFAULT: SoldierFormData = {
   referenceRelationship: '',
   referenceAgreed: false,
   additionalNotes: '',
-  militaryIdFile: null,
 }
 
 const STEPS = ['Personal Info', 'Situation', 'Preferences', 'Verification']
@@ -90,7 +86,7 @@ export default function SoldierOnboarding() {
   useEffect(() => {
     const draft = loadDraft()
     if (draft && hasMeaningfulProgress(draft)) {
-      setData({ ...draft.data, militaryIdFile: null })
+      setData(draft.data)
       setStep(draft.step)
       setHasDraft(true)
     }
@@ -131,44 +127,8 @@ export default function SoldierOnboarding() {
 
     try {
       const supabase = createClient()
-      let militaryIdUrl: string | null = null
 
-      if (data.militaryIdFile) {
-        const file = data.militaryIdFile
-        const MAX_BYTES = 10 * 1024 * 1024 // 10 MB
-
-        console.log('[upload] Attempting military ID upload:', {
-          name: file.name,
-          sizeMB: (file.size / 1024 / 1024).toFixed(2),
-          type: file.type,
-        })
-        console.log('[upload] Storage policy: bucket=military-ids, anon INSERT allowed via "Anyone can upload military ID" RLS policy (WITH CHECK bucket_id = \'military-ids\')')
-
-        if (file.size > MAX_BYTES) {
-          throw new Error(`File is too large (${(file.size / 1024 / 1024).toFixed(1)} MB). Maximum allowed size is 10 MB.`)
-        }
-
-        const fileName = `${Date.now()}_${file.name.replace(/\s+/g, '_')}`
-        console.log('[upload] Uploading as:', fileName)
-
-        const { data: upload, error: uploadError } = await supabase.storage
-          .from('military-ids')
-          .upload(fileName, file)
-
-        if (uploadError) {
-          console.error('[upload] Supabase Storage error:')
-          console.error('  message:', uploadError.message)
-          console.error('  name:', uploadError.name)
-          console.error('  statusCode:', (uploadError as unknown as Record<string, unknown>).statusCode)
-          console.error('  full error:', JSON.stringify(uploadError))
-          throw new Error(`File upload failed: ${uploadError.message}`)
-        }
-
-        militaryIdUrl = upload.path
-        console.log('[upload] Upload succeeded, path:', militaryIdUrl)
-      }
-
-      console.log('[submit] Inserting soldier row, militaryIdUrl:', militaryIdUrl)
+      console.log('[submit] Inserting soldier row')
 
       const { error: dbError } = await supabase.from('soldiers').insert({
         first_name: data.firstName,
@@ -189,7 +149,6 @@ export default function SoldierOnboarding() {
         pets_ok: data.petsOk,
         has_dietary_restrictions: data.hasDietaryRestrictions,
         dietary_details: data.dietaryDetails || null,
-        military_id_url: militaryIdUrl,
         reference_name: data.referenceName || null,
         reference_phone: data.referencePhone || null,
         reference_relationship: data.referenceRelationship || null,

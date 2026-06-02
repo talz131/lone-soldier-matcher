@@ -101,7 +101,6 @@ export type SoldierFormData = {
   referenceRelationship: string
   referenceAgreed: boolean
   additionalNotes: string
-  militaryIdFile: File | null
 }
 
 export type FamilyFormData = {

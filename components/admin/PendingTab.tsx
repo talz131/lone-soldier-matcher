@@ -13,6 +13,7 @@ interface Props {
 }
 
 export default function PendingTab({ onMatchCreated }: Props) {
+  const [statusFilter, setStatusFilter] = useState<'pending' | 'approved'>('pending')
   const [view, setView] = useState<'soldiers' | 'families'>('soldiers')
   const [soldiers, setSoldiers] = useState<Soldier[]>([])
   const [families, setFamilies] = useState<HostFamily[]>([])
@@ -22,13 +23,14 @@ export default function PendingTab({ onMatchCreated }: Props) {
 
   const supabase = createClient()
 
-  useEffect(() => { fetchAll() }, [])
+  useEffect(() => { fetchAll() }, [statusFilter])
 
   const fetchAll = async () => {
     setLoading(true)
+    setExpanded(null)
     const [{ data: s }, { data: f }] = await Promise.all([
-      supabase.from('soldiers').select('*').eq('status', 'pending').order('created_at', { ascending: false }),
-      supabase.from('host_families').select('*').eq('status', 'pending').order('created_at', { ascending: false }),
+      supabase.from('soldiers').select('*').eq('status', statusFilter).order('created_at', { ascending: false }),
+      supabase.from('host_families').select('*').eq('status', statusFilter).order('created_at', { ascending: false }),
     ])
     setSoldiers(s ?? [])
     setFamilies(f ?? [])
@@ -81,6 +83,29 @@ export default function PendingTab({ onMatchCreated }: Props) {
 
   return (
     <div>
+      {/* Status toggle: Pending Review / Approved & Unmatched */}
+      <div style={{ display: 'flex', gap: 6, marginBottom: 16, background: '#F9F6F0', borderRadius: 12, padding: 4 }}>
+        {(['pending', 'approved'] as const).map(s => (
+          <button key={s} onClick={() => setStatusFilter(s)}
+            style={{
+              flex: 1,
+              padding: '6px 10px',
+              borderRadius: 9,
+              fontSize: 12,
+              fontWeight: 600,
+              border: 'none',
+              background: statusFilter === s ? 'white' : 'transparent',
+              color: statusFilter === s ? '#0B2818' : '#888',
+              cursor: 'pointer',
+              boxShadow: statusFilter === s ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
+              transition: 'all 0.15s',
+            }}
+          >
+            {s === 'pending' ? 'Pending Review' : 'Approved & Unmatched'}
+          </button>
+        ))}
+      </div>
+
       {/* Sub-tabs: Lone Soldiers / Host Families */}
       <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
         {(['soldiers', 'families'] as const).map(v => (
@@ -118,8 +143,12 @@ export default function PendingTab({ onMatchCreated }: Props) {
         <div style={{ textAlign: 'center', padding: '64px 0', color: '#888' }}>Loading...</div>
       ) : items.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '64px 0', color: '#888' }}>
-          <div style={{ fontSize: 36, marginBottom: 12 }}>✅</div>
-          <p style={{ fontWeight: 500 }}>All caught up! No pending {view}.</p>
+          <div style={{ fontSize: 36, marginBottom: 12 }}>{statusFilter === 'pending' ? '✅' : '🎯'}</div>
+          <p style={{ fontWeight: 500 }}>
+            {statusFilter === 'pending'
+              ? `All caught up! No pending ${view}.`
+              : `No approved unmatched ${view} yet.`}
+          </p>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -159,14 +188,18 @@ export default function PendingTab({ onMatchCreated }: Props) {
                       style={{ fontSize: 12, color: '#555', padding: '5px 10px', borderRadius: 8, border: '1px solid #e8e0d4', background: 'white', cursor: 'pointer' }}>
                       {isOpen ? 'Collapse' : 'View details'}
                     </button>
-                    <button onClick={() => view === 'soldiers' ? updateSoldier(id, 'declined') : updateFamily(id, 'declined')}
-                      style={{ fontSize: 12, fontWeight: 500, color: '#dc2626', padding: '5px 10px', borderRadius: 8, border: '1px solid #fecaca', background: 'white', cursor: 'pointer' }}>
-                      Decline
-                    </button>
-                    <button onClick={() => view === 'soldiers' ? updateSoldier(id, 'approved') : updateFamily(id, 'approved')}
-                      style={{ fontSize: 12, fontWeight: 500, color: 'white', padding: '5px 10px', borderRadius: 8, border: 'none', background: '#1D9E75', cursor: 'pointer' }}>
-                      Approve
-                    </button>
+                    {statusFilter === 'pending' && (
+                      <>
+                        <button onClick={() => view === 'soldiers' ? updateSoldier(id, 'declined') : updateFamily(id, 'declined')}
+                          style={{ fontSize: 12, fontWeight: 500, color: '#dc2626', padding: '5px 10px', borderRadius: 8, border: '1px solid #fecaca', background: 'white', cursor: 'pointer' }}>
+                          Decline
+                        </button>
+                        <button onClick={() => view === 'soldiers' ? updateSoldier(id, 'approved') : updateFamily(id, 'approved')}
+                          style={{ fontSize: 12, fontWeight: 500, color: 'white', padding: '5px 10px', borderRadius: 8, border: 'none', background: '#1D9E75', cursor: 'pointer' }}>
+                          Approve
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
 
@@ -188,7 +221,6 @@ export default function PendingTab({ onMatchCreated }: Props) {
                             <Detail label="Observance Pref." value={s.religious_observance} />
                             <Detail label="Pets OK?" value={s.pets_ok ? 'Yes' : 'No'} />
                             <Detail label="Dietary Restrictions" value={s.has_dietary_restrictions ? s.dietary_details || 'Yes' : 'None'} />
-                            <Detail label="Military ID" value={s.military_id_url ? '✅ Uploaded' : '❌ Not uploaded'} />
                           </div>
                           <MatchSuggestions
                             soldier={s}

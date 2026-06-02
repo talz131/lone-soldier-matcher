@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import type { SoldierFormData } from '@/types'
 
 type Props = {
@@ -18,7 +18,6 @@ const inp = (err?: string) =>
   }`
 
 export default function Step4Verification({ data, onChange, onSubmit, onBack, loading, error }: Props) {
-  const fileRef = useRef<HTMLInputElement>(null)
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   const isValidPhone = (v: string) => /^05\d{8}$/.test(v)
@@ -36,51 +35,8 @@ export default function Step4Verification({ data, onChange, onSubmit, onBack, lo
     <div>
       <h2 className="font-serif text-xl text-[#0B2818] mb-1">Reference &amp; Verification</h2>
       <p className="text-[#888] text-sm mb-7">
-        Almost done! Please upload your military ID and provide a reference who can vouch for you.
+        Almost done! Please provide a reference who can vouch for you.
       </p>
-
-      {/* ── Military ID upload ───────────────────────────────────────────────── */}
-      <div
-        className="border-2 border-dashed border-[#d4c9b8] rounded-2xl p-8 text-center cursor-pointer hover:border-[#EF9F27] transition-colors mb-4"
-        onClick={() => fileRef.current?.click()}
-      >
-        <input
-          ref={fileRef}
-          type="file"
-          accept="image/*,.pdf"
-          className="hidden"
-          onChange={e => onChange({ militaryIdFile: e.target.files?.[0] ?? null })}
-        />
-        {data.militaryIdFile ? (
-          <div className="flex flex-col items-center gap-2">
-            <div className="w-12 h-12 bg-[#e6f7f1] rounded-full flex items-center justify-center">
-              <svg className="w-6 h-6 text-[#1D9E75]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <p className="text-sm font-medium text-[#0B2818]">{data.militaryIdFile.name}</p>
-            <p className="text-xs text-[#888]">Click to replace</p>
-          </div>
-        ) : (
-          <div className="flex flex-col items-center gap-2">
-            <div className="w-12 h-12 bg-[#F9F6F0] rounded-full flex items-center justify-center">
-              <svg className="w-6 h-6 text-[#888]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-              </svg>
-            </div>
-            <p className="text-sm font-medium text-[#555]">Click to upload military ID</p>
-            <p className="text-xs text-[#888]">JPG, PNG or PDF, up to 10MB</p>
-          </div>
-        )}
-      </div>
-
-      {/* Privacy note */}
-      <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6 text-sm text-amber-700">
-        <strong>Privacy note:</strong> Your military ID is used only for verification and is never shared
-        with host families. It is stored securely and accessible only to our admin team.
-      </div>
-
-      <hr className="gold-rule mb-6" />
 
       {/* ── Reference section ────────────────────────────────────────────────── */}
       <h3 className="font-serif text-base text-[#0B2818] mb-1">Your reference</h3>
