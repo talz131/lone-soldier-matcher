@@ -48,29 +48,6 @@ export default function Step1Personal({ data, onChange, onNext }: Props) {
       </div>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium text-[#555] mb-1.5">Gender *</label>
-        <div className="grid grid-cols-2 gap-2">
-          {[
-            { value: 'male', label: 'Male' },
-            { value: 'female', label: 'Female' },
-            { value: 'other', label: 'Other' },
-            { value: 'prefer_not_to_say', label: 'Prefer not to say' },
-          ].map(opt => (
-            <button key={opt.value} type="button" onClick={() => onChange({ gender: opt.value })}
-              className={`py-2.5 px-3 rounded-xl border text-sm font-medium transition-all text-left ${
-                data.gender === opt.value
-                  ? 'bg-[#0F3D2E] border-[#0F3D2E] text-white'
-                  : errors.gender
-                    ? 'border-red-300 text-[#555] hover:border-[#1D9E75]'
-                    : 'border-[#d4c9b8] text-[#555] hover:border-[#1D9E75]'
-              }`}
-            >{opt.label}</button>
-          ))}
-        </div>
-        {errors.gender && <p className="text-red-500 text-xs mt-1">{errors.gender}</p>}
-      </div>
-
-      <div className="mb-4">
         <label className="block text-sm font-medium text-[#555] mb-1.5">Email Address *</label>
         <input type="email" value={data.email} onChange={e => onChange({ email: e.target.value })} className={inp(errors.email)} placeholder="yoni@example.com" />
         {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
@@ -95,9 +72,32 @@ export default function Step1Personal({ data, onChange, onNext }: Props) {
         <input type="date" value={data.dateOfBirth} onChange={e => onChange({ dateOfBirth: e.target.value })} className={inp()} />
       </div>
 
-      <div className="mb-8">
+      <div className="mb-4">
         <label className="block text-sm font-medium text-[#555] mb-1.5">Country of Origin</label>
         <input type="text" value={data.countryOfOrigin} onChange={e => onChange({ countryOfOrigin: e.target.value })} className={inp()} placeholder="United States" />
+      </div>
+
+      <div className="mb-8">
+        <label className="block text-sm font-medium text-[#555] mb-1.5">Gender *</label>
+        <div className="grid grid-cols-2 gap-2">
+          {[
+            { value: 'male', label: 'Male' },
+            { value: 'female', label: 'Female' },
+            { value: 'other', label: 'Other' },
+            { value: 'prefer_not_to_say', label: 'Prefer not to say' },
+          ].map(opt => (
+            <button key={opt.value} type="button" onClick={() => onChange({ gender: opt.value })}
+              className={`py-2.5 px-3 rounded-xl border text-sm font-medium transition-all text-left ${
+                data.gender === opt.value
+                  ? 'bg-[#0F3D2E] border-[#0F3D2E] text-white'
+                  : errors.gender
+                    ? 'border-red-300 text-[#555] hover:border-[#1D9E75]'
+                    : 'border-[#d4c9b8] text-[#555] hover:border-[#1D9E75]'
+              }`}
+            >{opt.label}</button>
+          ))}
+        </div>
+        {errors.gender && <p className="text-red-500 text-xs mt-1">{errors.gender}</p>}
       </div>
 
       <div className="flex justify-end">
