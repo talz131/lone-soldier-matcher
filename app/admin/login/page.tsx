@@ -44,7 +44,7 @@ export default function AdminLogin() {
       <div className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-sm">
           <div className="text-center mb-8">
-            <Image src="/logo.png" alt="Lone Soldier Matcher" width={80} height={80} className="rounded-full mx-auto mb-4 shadow-md" />
+            <Image src="/logo.png" alt="Lone Soldier Matcher" width={80} height={80} className="rounded-full mx-auto mb-4 shadow-md" loading="lazy" />
             <h1 className="font-serif text-2xl text-[#0B2818]">Admin Access</h1>
             <p className="text-[#888] text-sm mt-1">Lone Soldier Matcher</p>
           </div>

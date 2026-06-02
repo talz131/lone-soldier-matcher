@@ -17,7 +17,7 @@ export default function SoldierPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
           </Link>
-          <Image src="/logo.png" alt="Logo" width={36} height={36} className="rounded-full shrink-0" />
+          <Image src="/logo.png" alt="Logo" width={36} height={36} className="rounded-full shrink-0" loading="lazy" />
           <span className="text-white text-sm font-semibold">Lone Soldier Matcher</span>
         </div>
       </nav>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { createClient } from '@/lib/supabase-client'
 import StepIndicator from '@/components/StepIndicator'
 import Step1Personal from './Step1Personal'
@@ -79,6 +79,8 @@ export default function SoldierOnboarding() {
   const [hasDraft, setHasDraft] = useState(false)
   // hydrated prevents writing blank defaults back before the draft is loaded
   const [hydrated, setHydrated] = useState(false)
+  // Debounce ref: localStorage writes are synchronous I/O — batch them
+  const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // On mount: restore saved draft (runs client-side only — localStorage is unavailable on the server)
   useEffect(() => {
@@ -91,23 +93,35 @@ export default function SoldierOnboarding() {
     setHydrated(true)
   }, [])
 
-  // Auto-save whenever data or step change, but only after the draft has been loaded
+  // Debounced auto-save: waits 600ms after the last change before writing to localStorage
   useEffect(() => {
     if (!hydrated) return
-    saveDraft(step, data)
+    if (saveTimerRef.current) clearTimeout(saveTimerRef.current)
+    saveTimerRef.current = setTimeout(() => saveDraft(step, data), 600)
+    return () => {
+      if (saveTimerRef.current) clearTimeout(saveTimerRef.current)
+    }
   }, [data, step, hydrated])
 
-  const update = (updates: Partial<SoldierFormData>) =>
-    setData(prev => ({ ...prev, ...updates }))
+  // Stable callbacks — new function objects are not created on every render
+  const update = useCallback(
+    (updates: Partial<SoldierFormData>) => setData(prev => ({ ...prev, ...updates })),
+    []
+  )
 
-  const startFresh = () => {
+  const goStep1 = useCallback(() => setStep(1), [])
+  const goStep2 = useCallback(() => setStep(2), [])
+  const goStep3 = useCallback(() => setStep(3), [])
+  const goStep4 = useCallback(() => setStep(4), [])
+
+  const startFresh = useCallback(() => {
     clearDraft()
     setData(DEFAULT)
     setStep(1)
     setHasDraft(false)
-  }
+  }, [])
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     setLoading(true)
     setError('')
 
@@ -157,7 +171,7 @@ export default function SoldierOnboarding() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [data])
 
   if (submitted) {
     return (
@@ -190,10 +204,10 @@ export default function SoldierOnboarding() {
         </div>
       )}
       <StepIndicator currentStep={step} totalSteps={4} steps={STEPS} color="#1D9E75" />
-      {step === 1 && <Step1Personal data={data} onChange={update} onNext={() => setStep(2)} />}
-      {step === 2 && <Step2Situation data={data} onChange={update} onNext={() => setStep(3)} onBack={() => setStep(1)} />}
-      {step === 3 && <Step3Preferences data={data} onChange={update} onNext={() => setStep(4)} onBack={() => setStep(2)} />}
-      {step === 4 && <Step4Verification data={data} onChange={update} onSubmit={handleSubmit} onBack={() => setStep(3)} loading={loading} error={error} />}
+      {step === 1 && <Step1Personal data={data} onChange={update} onNext={goStep2} />}
+      {step === 2 && <Step2Situation data={data} onChange={update} onNext={goStep3} onBack={goStep1} />}
+      {step === 3 && <Step3Preferences data={data} onChange={update} onNext={goStep4} onBack={goStep2} />}
+      {step === 4 && <Step4Verification data={data} onChange={update} onSubmit={handleSubmit} onBack={goStep3} loading={loading} error={error} />}
     </>
   )
 }
