@@ -50,7 +50,7 @@ export default function Step2Situation({ data, onChange, onNext, onBack }: Props
           {[
             'Daily (יומיות)',
             '11/3',
-            '12/2',
+            '17/4',
             'Every Thursday (חמשושים)',
             'Irregular',
             'Not yet drafted',

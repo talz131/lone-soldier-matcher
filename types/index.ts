@@ -113,6 +113,7 @@ export type FamilyFormData = {
   religiousObservance: string
   pets: string
   additionalNotes: string
+  soldierGenderPreference: string
   referenceName: string
   referencePhone: string
   referenceRelationship: string

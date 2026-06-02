@@ -69,6 +69,25 @@ export default function Step2Household({ data, onChange, onNext, onBack }: Props
         </div>
       </div>
 
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-[#555] mb-2">Soldier gender preference</label>
+        <div className="flex gap-2">
+          {[
+            { value: 'male', label: 'Male' },
+            { value: 'female', label: 'Female' },
+            { value: 'no_preference', label: 'No preference' },
+          ].map(opt => (
+            <button key={opt.value} type="button" onClick={() => onChange({ soldierGenderPreference: opt.value })}
+              className={`flex-1 py-2.5 rounded-xl border text-sm font-medium transition-all ${
+                data.soldierGenderPreference === opt.value
+                  ? 'bg-[#0F3D2E] border-[#0F3D2E] text-white'
+                  : 'border-[#d4c9b8] text-[#555] hover:border-[#534AB7]'
+              }`}
+            >{opt.label}</button>
+          ))}
+        </div>
+      </div>
+
       <div className="mb-8">
         <label className="block text-sm font-medium text-[#555] mb-2">What can you offer the soldier?</label>
         <div className="grid grid-cols-2 gap-2">
