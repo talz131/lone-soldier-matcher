@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase-client'
 import StepIndicator from '@/components/StepIndicator'
 import Step1Personal from './Step1Personal'
@@ -8,6 +8,40 @@ import Step2Situation from './Step2Situation'
 import Step3Preferences from './Step3Preferences'
 import Step4Verification from './Step4Verification'
 import type { SoldierFormData } from '@/types'
+
+// ─── Draft persistence ────────────────────────────────────────────────────────
+
+const DRAFT_KEY = 'lsm_soldier_draft'
+
+// File objects can't be JSON-serialised, so we always store militaryIdFile as null.
+type SerializableData = Omit<SoldierFormData, 'militaryIdFile'> & { militaryIdFile: null }
+type Draft = { step: number; data: SerializableData }
+
+function saveDraft(step: number, data: SoldierFormData) {
+  try {
+    const payload: Draft = { step, data: { ...data, militaryIdFile: null } }
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(payload))
+  } catch { /* quota errors, private browsing, etc. */ }
+}
+
+function loadDraft(): Draft | null {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY)
+    return raw ? (JSON.parse(raw) as Draft) : null
+  } catch {
+    return null
+  }
+}
+
+function clearDraft() {
+  try { localStorage.removeItem(DRAFT_KEY) } catch { /* ignore */ }
+}
+
+function hasMeaningfulProgress(draft: Draft): boolean {
+  return draft.step > 1 || !!(draft.data.firstName || draft.data.email)
+}
+
+// ─── Defaults ─────────────────────────────────────────────────────────────────
 
 const DEFAULT: SoldierFormData = {
   firstName: '',
@@ -34,15 +68,44 @@ const DEFAULT: SoldierFormData = {
 
 const STEPS = ['Personal Info', 'Situation', 'Preferences', 'Verification']
 
+// ─── Component ────────────────────────────────────────────────────────────────
+
 export default function SoldierOnboarding() {
   const [step, setStep] = useState(1)
   const [data, setData] = useState<SoldierFormData>(DEFAULT)
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [hasDraft, setHasDraft] = useState(false)
+  // hydrated prevents writing blank defaults back before the draft is loaded
+  const [hydrated, setHydrated] = useState(false)
+
+  // On mount: restore saved draft (runs client-side only — localStorage is unavailable on the server)
+  useEffect(() => {
+    const draft = loadDraft()
+    if (draft && hasMeaningfulProgress(draft)) {
+      setData({ ...draft.data, militaryIdFile: null })
+      setStep(draft.step)
+      setHasDraft(true)
+    }
+    setHydrated(true)
+  }, [])
+
+  // Auto-save whenever data or step change, but only after the draft has been loaded
+  useEffect(() => {
+    if (!hydrated) return
+    saveDraft(step, data)
+  }, [data, step, hydrated])
 
   const update = (updates: Partial<SoldierFormData>) =>
     setData(prev => ({ ...prev, ...updates }))
+
+  const startFresh = () => {
+    clearDraft()
+    setData(DEFAULT)
+    setStep(1)
+    setHasDraft(false)
+  }
 
   const handleSubmit = async () => {
     setLoading(true)
@@ -86,6 +149,7 @@ export default function SoldierOnboarding() {
       })
 
       if (dbError) throw dbError
+      clearDraft()
       setSubmitted(true)
     } catch (err) {
       console.error(err)
@@ -114,6 +178,17 @@ export default function SoldierOnboarding() {
 
   return (
     <>
+      {hasDraft && (
+        <div className="mb-4 flex items-center justify-between gap-3 rounded-xl border border-[#c6e8d8] bg-[#edf7f2] px-4 py-3 text-sm">
+          <span className="text-[#0F3D2E]">↩ Continuing where you left off</span>
+          <button
+            onClick={startFresh}
+            className="shrink-0 text-xs text-[#1D9E75] underline hover:text-[#0F3D2E] transition-colors"
+          >
+            Start fresh
+          </button>
+        </div>
+      )}
       <StepIndicator currentStep={step} totalSteps={4} steps={STEPS} color="#1D9E75" />
       {step === 1 && <Step1Personal data={data} onChange={update} onNext={() => setStep(2)} />}
       {step === 2 && <Step2Situation data={data} onChange={update} onNext={() => setStep(3)} onBack={() => setStep(1)} />}
