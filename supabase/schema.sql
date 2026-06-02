@@ -138,10 +138,10 @@ INSERT INTO storage.buckets (id, name, public)
   VALUES ('military-ids', 'military-ids', false)
   ON CONFLICT (id) DO NOTHING;
 
--- Allow anonymous users (form submitters) to upload files
+-- Allow any user (anon or authenticated) to upload files
+-- No TO clause = applies to all roles (anon + authenticated)
 CREATE POLICY "Anyone can upload military ID"
   ON storage.objects FOR INSERT
-  TO anon
   WITH CHECK (bucket_id = 'military-ids');
 
 -- Allow authenticated admins to read/download the files
