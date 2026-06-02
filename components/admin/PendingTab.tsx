@@ -31,17 +31,29 @@ export default function PendingTab() {
   }
 
   const sendEmail = async (email: string, name: string, entityType: 'soldier' | 'family', status: 'approved' | 'declined') => {
+    console.log('[PendingTab] sendEmail called:', { email, name, entityType, status })
     try {
-      await fetch('/api/send-email', {
+      const res = await fetch('/api/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, name, entityType, status }),
       })
-    } catch (err) { console.error('Email failed:', err) }
+      const json = await res.json()
+      if (!res.ok) {
+        console.error('[PendingTab] Email API returned error:', res.status, json)
+        alert(`⚠️ Decision saved, but email failed to send.\n\nError: ${JSON.stringify(json?.error ?? json)}\n\nCheck Vercel logs for details.`)
+      } else {
+        console.log('[PendingTab] Email sent OK:', json)
+      }
+    } catch (err) {
+      console.error('[PendingTab] Network error sending email:', err)
+      alert('⚠️ Decision saved, but email could not be sent (network error).')
+    }
   }
 
   const updateSoldier = async (id: string, status: 'approved' | 'declined') => {
     const soldier = soldiers.find(s => s.id === id)
+    console.log('[PendingTab] updateSoldier:', id, status, 'email:', soldier?.email)
     await supabase.from('soldiers').update({ status, admin_notes: notes[id] || null, reviewed_at: new Date().toISOString() }).eq('id', id)
     if (soldier) await sendEmail(soldier.email, soldier.first_name, 'soldier', status)
     fetchAll()
@@ -49,6 +61,7 @@ export default function PendingTab() {
 
   const updateFamily = async (id: string, status: 'approved' | 'declined') => {
     const family = families.find(f => f.id === id)
+    console.log('[PendingTab] updateFamily:', id, status, 'email:', family?.email)
     await supabase.from('host_families').update({ status, admin_notes: notes[id] || null, reviewed_at: new Date().toISOString() }).eq('id', id)
     if (family) await sendEmail(family.email, family.contact_name, 'family', status)
     fetchAll()

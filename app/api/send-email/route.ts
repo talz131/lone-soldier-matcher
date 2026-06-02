@@ -1,7 +1,8 @@
 import { Resend } from 'resend'
 import { NextResponse } from 'next/server'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Resolved at request time so missing env vars surface as clear errors
+// rather than silently constructing a broken Resend instance at module load.
 const FROM = process.env.EMAIL_FROM ?? 'onboarding@resend.dev'
 
 function approvalSoldierHtml(name: string) {
@@ -123,12 +124,32 @@ function declineFamilyHtml(name: string) {
 }
 
 export async function POST(request: Request) {
+  // ── Env diagnostics (visible in Vercel function logs) ─────────────────────
+  console.log('[send-email] RESEND_API_KEY present:', !!process.env.RESEND_API_KEY)
+  console.log('[send-email] EMAIL_FROM:', FROM)
+
+  if (!process.env.RESEND_API_KEY) {
+    console.error('[send-email] RESEND_API_KEY is not set — aborting')
+    return NextResponse.json({ error: 'RESEND_API_KEY not configured' }, { status: 500 })
+  }
+
+  // Instantiate here so we always use the current env value
+  const resend = new Resend(process.env.RESEND_API_KEY)
+
   try {
-    const { email, name, entityType, status } = await request.json() as {
+    const body = await request.json() as {
       email: string
       name: string
       entityType: 'soldier' | 'family'
       status: 'approved' | 'declined'
+    }
+
+    const { email, name, entityType, status } = body
+    console.log('[send-email] Sending:', { to: email, name, entityType, status, from: FROM })
+
+    if (!email) {
+      console.error('[send-email] No email address provided')
+      return NextResponse.json({ error: 'No email address' }, { status: 400 })
     }
 
     const subject =
@@ -142,7 +163,7 @@ export async function POST(request: Request) {
       : status === 'declined' && entityType === 'soldier' ? declineSoldierHtml(name)
       : declineFamilyHtml(name)
 
-    const { error } = await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: FROM,
       to: email,
       subject,
@@ -150,13 +171,14 @@ export async function POST(request: Request) {
     })
 
     if (error) {
-      console.error('Resend error:', error)
+      console.error('[send-email] Resend error:', JSON.stringify(error))
       return NextResponse.json({ error }, { status: 500 })
     }
 
-    return NextResponse.json({ ok: true })
+    console.log('[send-email] Sent OK, id:', data?.id)
+    return NextResponse.json({ ok: true, id: data?.id })
   } catch (err) {
-    console.error('Email route error:', err)
+    console.error('[send-email] Unexpected error:', err)
     return NextResponse.json({ error: 'Failed to send email' }, { status: 500 })
   }
 }
