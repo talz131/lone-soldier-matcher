@@ -55,7 +55,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F9F6F0]">
+    <div className="min-h-screen">
 
       {/* Nav — intentionally full-width, no max-width constraint */}
       <header style={{ background: '#0F3D2E', width: '100%' }}>
@@ -72,7 +72,7 @@ export default function AdminDashboard() {
       </header>
       <hr className="gold-rule" />
 
-      <div className="max-w-6xl mx-auto px-4 py-6">
+      <div className="px-4 py-6">
 
         {/* Tabs — all four on one line, 11px, minimal padding */}
         <div style={{ borderBottom: '1px solid #e8e0d4', marginBottom: 24 }}>

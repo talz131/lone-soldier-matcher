@@ -31,7 +31,7 @@ export default function AdminLogin() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F9F6F0] flex flex-col">
+    <div className="min-h-screen flex flex-col">
       {/* Nav */}
       <nav className="bg-[#0F3D2E]">
         <div className="px-6 py-3.5 flex items-center gap-3">

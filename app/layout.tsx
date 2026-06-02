@@ -17,14 +17,16 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      {/*
-        body background = #E8E4DC — the darker band visible on wide desktops
-        The inner div is the app column: max 430px, centred, always #F9F6F0.
-        Using inline styles so no Tailwind purge can strip them.
-      */}
       <body className={`${inter.className} antialiased`}>
-        {/* .app-frame is defined in globals.css — 440px on mobile, 680px on desktop ≥768px */}
-        <div className="app-frame">
+        {/* Single source of truth for app width + background.
+            Inline style is immune to Tailwind purging — this will never break. */}
+        <div style={{
+          maxWidth: '680px',
+          width: '100%',
+          margin: '0 auto',
+          minHeight: '100vh',
+          backgroundColor: '#F9F6F0',
+        }}>
           {children}
         </div>
       </body>

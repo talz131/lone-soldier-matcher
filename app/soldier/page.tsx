@@ -4,10 +4,10 @@ import SoldierOnboarding from '@/components/soldier/SoldierOnboarding'
 
 export default function SoldierPage() {
   return (
-    <div className="min-h-screen bg-[#F9F6F0]">
+    <div className="min-h-screen">
       {/* Nav */}
       <nav className="bg-[#0F3D2E]">
-        <div className="page-shell px-5 py-3.5 flex items-center gap-3">
+        <div className="px-5 py-3.5 flex items-center gap-3">
           <Link
             href="/"
             className="text-white/60 hover:text-white transition-colors mr-1"
@@ -23,7 +23,7 @@ export default function SoldierPage() {
       </nav>
       <hr className="gold-rule" />
 
-      <div className="page-shell px-4 py-8">
+      <div className="px-4 py-8">
         <div className="text-center mb-6">
           <div className="w-12 h-12 bg-[#0F3D2E] rounded-2xl flex items-center justify-center mx-auto mb-4">
             <svg className="w-6 h-6 text-[#1D9E75]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

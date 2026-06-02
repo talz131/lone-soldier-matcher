@@ -45,7 +45,7 @@ export default function Home() {
       )}
 
       {/* Page content — always in DOM; fades + staggers in after intro */}
-      <div className="min-h-screen bg-[#F9F6F0] flex flex-col">
+      <div className="min-h-screen flex flex-col">
         <div className="flex-1 flex items-center justify-center px-4 py-6">
           <div className="w-full">
 
