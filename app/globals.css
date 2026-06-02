@@ -4,7 +4,8 @@
 
 @layer base {
   body {
-    background-color: #F9F6F0;
+    /* Darker band visible on desktop outside the centered column */
+    background-color: #E8E4DC;
     color: #555;
   }
 }
@@ -23,7 +24,7 @@
   font-family: Georgia, 'Times New Roman', serif;
 }
 
-/* Central content shell: 420px max, always centred */
+/* Legacy helper — kept for any page still using it */
 .page-shell {
   max-width: 420px;
   margin-left: auto;

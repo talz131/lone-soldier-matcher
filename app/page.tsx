@@ -46,7 +46,7 @@ export default function Home() {
 
       {/* Page content — always in DOM; fades + staggers in after intro */}
       <div className="min-h-screen bg-[#F9F6F0] flex flex-col">
-        <div className="flex-1 flex items-center justify-center px-4 py-12">
+        <div className="flex-1 flex items-center justify-center px-4 py-6">
           <div className="w-full max-w-sm">
 
             {/* 0 — Logo */}
@@ -63,7 +63,7 @@ export default function Home() {
 
             {/* 1 — Headline */}
             <div className="text-center mb-3" style={fadeUp(1, visible)}>
-              <h1 className="font-serif text-xl text-[#0B2818] leading-snug">
+              <h1 className="font-serif text-base text-[#0B2818] leading-snug">
                 No soldier should feel<br />
                 <span className="text-[#1D9E75]">alone</span> away from home.
               </h1>
