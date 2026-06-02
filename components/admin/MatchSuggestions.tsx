@@ -112,13 +112,11 @@ interface Props {
 }
 
 export default function MatchSuggestions({ soldier, onMatchCreated }: Props) {
-  const [state, setState]           = useState<'idle' | 'loading' | 'done'>('idle')
-  const [results, setResults]       = useState<ScoredFamily[]>([])
-  /** Which family.id is currently in the inline confirmation panel. */
-  const [confirming, setConfirming] = useState<string | null>(null)
-  const [matchNotes, setMatchNotes] = useState('')
-  const [saving, setSaving]         = useState(false)
-  const [matched, setMatched]       = useState<{ soldierName: string; familyName: string } | null>(null)
+  const [state, setState]     = useState<'idle' | 'loading' | 'done'>('idle')
+  const [results, setResults] = useState<ScoredFamily[]>([])
+  /** family.id currently being saved — keeps individual buttons in loading state. */
+  const [savingId, setSavingId] = useState<string | null>(null)
+  const [matched, setMatched]   = useState<{ soldierName: string; familyName: string } | null>(null)
 
   const supabase = createClient()
 
@@ -136,19 +134,17 @@ export default function MatchSuggestions({ soldier, onMatchCreated }: Props) {
     setState('done')
   }
 
-  const handleMatchConfirm = async (family: HostFamily) => {
-    setSaving(true)
+  const handleMatch = async (family: HostFamily) => {
+    setSavingId(family.id)
     try {
-      // 1. Create the match record
+      // 1. Insert the match record
       const { error: matchErr } = await supabase.from('matches').insert({
         soldier_id: soldier.id,
         family_id:  family.id,
-        notes:      matchNotes.trim() || null,
       })
       if (matchErr) throw matchErr
 
-      // 2. Mark both as matched atomically.
-      //    Soldier goes directly pending → matched (the admin's intent is clear).
+      // 2. Mark both as matched. Soldier goes directly pending → matched.
       const [{ error: sErr }, { error: fErr }] = await Promise.all([
         supabase.from('soldiers')
           .update({ status: 'matched', reviewed_at: new Date().toISOString() })
@@ -164,25 +160,21 @@ export default function MatchSuggestions({ soldier, onMatchCreated }: Props) {
         soldierName: `${soldier.first_name} ${soldier.last_name}`,
         familyName:  family.contact_name,
       })
-      setConfirming(null)
       onMatchCreated?.()
     } catch (err) {
       console.error('[MatchSuggestions] createMatch failed:', err)
       alert('Failed to create match. Please try again.')
     } finally {
-      setSaving(false)
+      setSavingId(null)
     }
   }
 
-  // ── Success state ────────────────────────────────────────────────────────────
+  // ── Success state — replaces the whole panel ─────────────────────────────────
   if (matched) {
     return (
       <div className="mt-1 rounded-xl border border-[#c6e8d8] bg-[#edf7f2] px-4 py-3">
-        <p className="text-sm font-semibold text-[#0F3D2E]">✅ Match created!</p>
-        <p className="text-xs text-[#555] mt-0.5">
-          {matched.soldierName} ↔ {matched.familyName}
-        </p>
-        <p className="text-xs text-[#888] mt-1">Both records updated to &quot;matched&quot;. See Active Matches for details.</p>
+        <p className="text-sm font-semibold text-[#0F3D2E]">✅ Match created successfully</p>
+        <p className="text-xs text-[#555] mt-0.5">{matched.soldierName} ↔ {matched.familyName}</p>
       </div>
     )
   }
@@ -220,8 +212,6 @@ export default function MatchSuggestions({ soldier, onMatchCreated }: Props) {
           const pct   = Math.round(score)
           const color = pct >= 70 ? '#1D9E75' : pct >= 45 ? '#EF9F27' : '#888'
           const label = pct >= 70 ? 'Strong match' : pct >= 45 ? 'Possible match' : 'Weak match'
-          const isConfirming = confirming === family.id
-
           return (
             <div key={family.id} className="bg-white rounded-xl border border-[#e8e0d4] p-3">
               {/* Header row */}
@@ -262,44 +252,17 @@ export default function MatchSuggestions({ soldier, onMatchCreated }: Props) {
                 </p>
               ))}
 
-              {/* ── "Match this family" button or inline confirmation ───────── */}
-              {!isConfirming ? (
-                <button
-                  onClick={() => { setConfirming(family.id); setMatchNotes('') }}
-                  className="mt-2.5 w-full text-xs font-semibold text-white bg-[#0F3D2E] hover:bg-[#1D9E75] transition rounded-lg py-1.5 px-3 flex items-center justify-center gap-1.5"
-                >
-                  🤝 Match this family
-                </button>
-              ) : (
-                <div className="mt-2.5 rounded-lg border border-[#c6e8d8] bg-[#edf7f2] p-3">
-                  <p className="text-xs font-semibold text-[#0F3D2E] mb-2">
-                    Confirm: {soldier.first_name} {soldier.last_name} ↔ {family.contact_name}
-                  </p>
-                  <textarea
-                    value={matchNotes}
-                    onChange={e => setMatchNotes(e.target.value)}
-                    placeholder="Notes for this match (optional)…"
-                    rows={2}
-                    className="w-full text-xs border border-[#c6e8d8] rounded-lg px-2.5 py-2 bg-white text-[#0B2818] placeholder-[#aaa] focus:outline-none focus:ring-1 focus:ring-[#1D9E75] resize-none mb-2"
-                  />
-                  <div className="flex gap-2 justify-end">
-                    <button
-                      onClick={() => setConfirming(null)}
-                      disabled={saving}
-                      className="text-xs text-[#888] hover:text-[#555] transition px-2 py-1 disabled:opacity-50"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      onClick={() => handleMatchConfirm(family)}
-                      disabled={saving}
-                      className="text-xs font-semibold text-white bg-[#0F3D2E] hover:bg-[#1D9E75] transition rounded-lg px-3 py-1.5 disabled:opacity-50 flex items-center gap-1"
-                    >
-                      {saving ? 'Creating…' : '✓ Confirm match'}
-                    </button>
-                  </div>
-                </div>
-              )}
+              {/* Match button — full width, green, at the bottom of the card */}
+              <button
+                onClick={() => handleMatch(family)}
+                disabled={savingId !== null}
+                className="mt-3 w-full rounded-xl py-2 text-sm font-semibold text-white transition disabled:opacity-50"
+                style={{ backgroundColor: '#1D9E75' }}
+                onMouseEnter={e => { if (savingId === null) (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#0F3D2E' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#1D9E75' }}
+              >
+                {savingId === family.id ? 'Creating match…' : '🤝 Match this family'}
+              </button>
             </div>
           )
         })
