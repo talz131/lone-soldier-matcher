@@ -55,9 +55,10 @@ export default function SoldierOnboarding() {
       if (data.militaryIdFile) {
         const file = data.militaryIdFile
         const fileName = `${Date.now()}_${file.name.replace(/\s+/g, '_')}`
-        const { data: upload } = await supabase.storage
+        const { data: upload, error: uploadError } = await supabase.storage
           .from('military-ids')
           .upload(fileName, file)
+        if (uploadError) throw uploadError
         if (upload) militaryIdUrl = upload.path
       }
 

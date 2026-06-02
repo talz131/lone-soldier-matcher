@@ -132,18 +132,29 @@ CREATE POLICY "Admin full access to flags"
   ON flags FOR ALL USING (auth.role() = 'authenticated');
 
 -- ─── Storage ──────────────────────────────────────────────────────────────────
--- Run this after creating the tables:
 
--- INSERT INTO storage.buckets (id, name, public)
---   VALUES ('military-ids', 'military-ids', false);
+-- Create a private bucket for military ID uploads
+INSERT INTO storage.buckets (id, name, public)
+  VALUES ('military-ids', 'military-ids', false)
+  ON CONFLICT (id) DO NOTHING;
 
--- CREATE POLICY "Anyone can upload military ID"
---   ON storage.objects FOR INSERT
---   WITH CHECK (bucket_id = 'military-ids');
+-- Allow anonymous users (form submitters) to upload files
+CREATE POLICY "Anyone can upload military ID"
+  ON storage.objects FOR INSERT
+  TO anon
+  WITH CHECK (bucket_id = 'military-ids');
 
--- CREATE POLICY "Admin can view military IDs"
---   ON storage.objects FOR SELECT
---   USING (bucket_id = 'military-ids' AND auth.role() = 'authenticated');
+-- Allow authenticated admins to read/download the files
+CREATE POLICY "Admin can view military IDs"
+  ON storage.objects FOR SELECT
+  TO authenticated
+  USING (bucket_id = 'military-ids');
+
+-- Allow authenticated admins to delete files if needed
+CREATE POLICY "Admin can delete military IDs"
+  ON storage.objects FOR DELETE
+  TO authenticated
+  USING (bucket_id = 'military-ids');
 
 -- ─── Notes ────────────────────────────────────────────────────────────────────
 -- To create an admin user:
