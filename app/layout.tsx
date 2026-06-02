@@ -1,3 +1,4 @@
+// DO NOT CHANGE MAX-WIDTH - this controls the entire app layout
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'

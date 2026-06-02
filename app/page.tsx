@@ -54,8 +54,8 @@ export default function Home() {
               <Image
                 src="/logo.png"
                 alt="Lone Soldier Matcher"
-                width={100}
-                height={100}
+                width={90}
+                height={90}
                 className="home-logo rounded-full shadow-md"
                 priority
               />

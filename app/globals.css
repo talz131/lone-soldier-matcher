@@ -23,17 +23,8 @@
   font-family: Georgia, 'Times New Roman', serif;
 }
 
-/* ── Home page responsive tokens ──────────────────────────────────────────── */
-.home-logo    { width: 80px;  height: 80px; }
-.home-heading { font-size: 16px; line-height: 1.35; }
+/* ── Home page tokens — fixed sizes, no responsive overrides.
+   The app is capped at 680px so viewport breakpoints must not be used here. ── */
+.home-logo    { width: 90px;  height: 90px; }
+.home-heading { font-size: 22px; line-height: 1.3; }
 .home-cards   { display: flex; flex-direction: column; gap: 12px; }
-
-@media (min-width: 768px) {
-  .home-logo    { width: 100px; height: 100px; }
-  .home-heading { font-size: 26px; line-height: 1.25; }
-  .home-cards   { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: stretch; }
-
-  /* Make both cards stretch to equal height */
-  .home-cards > a       { display: flex; flex-direction: column; height: 100%; }
-  .home-cards > a > div { flex: 1; }
-}
