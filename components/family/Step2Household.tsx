@@ -16,7 +16,6 @@ const LANGUAGES = [
 const toggleItem = (list: string[], item: string) =>
   list.includes(item) ? list.filter(l => l !== item) : [...list, item]
 
-const inp = `w-full border border-[#d4c9b8] rounded-xl px-3.5 py-2.5 bg-white text-[#0B2818] text-sm focus:outline-none focus:ring-2 focus:ring-[#534AB7] focus:border-transparent transition`
 
 export default function Step2Household({ data, onChange, onNext, onBack }: Props) {
   return (
