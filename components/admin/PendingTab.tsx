@@ -75,8 +75,26 @@ export default function PendingTab({ onMatchCreated }: Props) {
   const updateFamily = async (id: string, status: 'approved' | 'declined') => {
     const family = families.find(f => f.id === id)
     console.log('[PendingTab] updateFamily:', id, status, 'email:', family?.email)
-    await supabase.from('host_families').update({ status, admin_notes: notes[id] || null, reviewed_at: new Date().toISOString() }).eq('id', id)
+    const extra = status === 'approved' ? { portal_token: crypto.randomUUID() } : {}
+    await supabase.from('host_families').update({ status, admin_notes: notes[id] || null, reviewed_at: new Date().toISOString(), ...extra }).eq('id', id)
     if (family) await sendEmail(family.email, family.contact_name, 'family', status)
+    fetchAll()
+  }
+
+  const generateFamilyPortalToken = async (id: string) => {
+    await supabase.from('host_families').update({ portal_token: crypto.randomUUID() }).eq('id', id)
+    fetchAll()
+  }
+
+  const deleteSoldier = async (id: string) => {
+    if (!confirm('Are you sure? This cannot be undone.')) return
+    await supabase.from('soldiers').delete().eq('id', id)
+    fetchAll()
+  }
+
+  const deleteFamily = async (id: string) => {
+    if (!confirm('Are you sure? This cannot be undone.')) return
+    await supabase.from('host_families').delete().eq('id', id)
     fetchAll()
   }
 
@@ -206,6 +224,10 @@ export default function PendingTab({ onMatchCreated }: Props) {
                         </button>
                       </>
                     )}
+                    <button onClick={() => view === 'soldiers' ? deleteSoldier(id) : deleteFamily(id)}
+                      style={{ fontSize: 12, fontWeight: 500, color: '#dc2626', padding: '5px 10px', borderRadius: 8, border: '1px solid #fecaca', background: 'white', cursor: 'pointer', marginLeft: 'auto' }}>
+                      Delete
+                    </button>
                   </div>
                 </div>
 
@@ -276,6 +298,7 @@ export default function PendingTab({ onMatchCreated }: Props) {
                     {view === 'families' && (() => {
                       const f = item as HostFamily
                       return (
+                        <>
                         <div className="grid grid-cols-2 gap-3 text-sm">
                           <Detail label="Email" value={f.email} />
                           <Detail label="Phone" value={f.phone} />
@@ -293,7 +316,34 @@ export default function PendingTab({ onMatchCreated }: Props) {
                             f.can_offer_shabbat && 'Shabbat',
                           ].filter(Boolean).join(', ')} />
                           <Detail label="Reference" value={f.reference_name ? `${f.reference_name} (${f.reference_relationship})` : undefined} />
+                          <Detail label="Additional Notes" value={f.additional_notes} />
                         </div>
+                        {/* Family portal link */}
+
+                        <div className="mt-1 rounded-xl border border-[#e8e0d4] bg-white p-3">
+                          <p className="text-xs font-semibold text-[#555] mb-2">🔗 Family Portal Link</p>
+                          {f.portal_token ? (
+                            <div className="flex items-center gap-2">
+                              <code className="flex-1 text-xs bg-[#F9F6F0] rounded-lg px-2 py-1.5 text-[#0B2818] overflow-hidden text-ellipsis whitespace-nowrap block">
+                                {typeof window !== 'undefined' ? `${window.location.origin}/family-portal/${f.portal_token}` : `/family-portal/${f.portal_token}`}
+                              </code>
+                              <button
+                                onClick={() => navigator.clipboard.writeText(`${window.location.origin}/family-portal/${f.portal_token!}`)}
+                                className="shrink-0 text-xs bg-[#534AB7] text-white px-3 py-1.5 rounded-lg hover:bg-[#0F3D2E] transition"
+                              >
+                                Copy
+                              </button>
+                            </div>
+                          ) : (
+                            <button
+                              onClick={() => generateFamilyPortalToken(f.id)}
+                              className="text-xs bg-[#EF9F27] text-white px-3 py-1.5 rounded-lg hover:opacity-90 transition"
+                            >
+                              Generate link
+                            </button>
+                          )}
+                        </div>
+                        </>
                       )
                     })()}
 
