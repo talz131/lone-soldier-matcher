@@ -38,6 +38,7 @@ export type HostFamily = {
   email: string
   phone?: string
   id_number?: string
+  max_soldiers?: string
   city?: string
   neighborhood?: string
   family_size?: number
@@ -119,6 +120,7 @@ export type FamilyFormData = {
   contactName: string
   idNumber: string
   email: string
+  maxSoldiers: string
   phone: string
   city: string
   neighborhood: string

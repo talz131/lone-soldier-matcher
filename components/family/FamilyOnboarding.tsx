@@ -45,6 +45,7 @@ const DEFAULT: FamilyFormData = {
   contactName: '',
   idNumber: '',
   email: '',
+  maxSoldiers: '',
   phone: '',
   city: '',
   neighborhood: '',
@@ -130,6 +131,7 @@ export default function FamilyOnboarding() {
       const { error: dbError } = await supabase.from('host_families').insert({
         contact_name: data.contactName,
         id_number: data.idNumber || null,
+        max_soldiers: data.maxSoldiers || null,
         email: data.email,
         phone: data.phone || null,
         city: data.city || null,

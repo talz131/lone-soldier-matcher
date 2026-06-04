@@ -58,6 +58,25 @@ export default function Step3Offerings({ data, onChange, onNext, onBack }: Props
       </div>
 
       <div className="mb-6">
+        <label className="block text-sm font-medium text-[#555] mb-2">How many soldiers can you host?</label>
+        <div className="flex gap-2">
+          {[
+            { value: '1', label: '1 soldier' },
+            { value: '2', label: '2 soldiers' },
+            { value: '3+', label: '3 or more' },
+          ].map(opt => (
+            <button key={opt.value} type="button" onClick={() => onChange({ maxSoldiers: opt.value })}
+              className={`flex-1 py-2.5 rounded-xl border text-sm font-medium transition-all ${
+                data.maxSoldiers === opt.value
+                  ? 'bg-[#0F3D2E] border-[#0F3D2E] text-white'
+                  : 'border-[#d4c9b8] text-[#555] hover:border-[#534AB7]'
+              }`}
+            >{opt.label}</button>
+          ))}
+        </div>
+      </div>
+
+      <div className="mb-6">
         <label className="block text-sm font-medium text-[#555] mb-2">Religious affiliation</label>
         <div className="flex flex-wrap gap-2">
           {OBSERVANCE.map(opt => (
