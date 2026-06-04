@@ -3,8 +3,11 @@ export type Soldier = {
   created_at: string
   first_name: string
   last_name: string
+  gender?: string
   email: string
   phone?: string
+  whatsapp_phone?: string
+  id_number?: string
   date_of_birth?: string
   country_of_origin?: string
   base_location?: string
@@ -18,6 +21,10 @@ export type Soldier = {
   has_dietary_restrictions?: boolean
   dietary_details?: string
   military_id_url?: string
+  reference_name?: string
+  reference_phone?: string
+  reference_relationship?: string
+  additional_notes?: string
   status: 'pending' | 'approved' | 'declined' | 'matched'
   admin_notes?: string
   reviewed_at?: string
@@ -30,6 +37,7 @@ export type HostFamily = {
   contact_name: string
   email: string
   phone?: string
+  id_number?: string
   city?: string
   neighborhood?: string
   family_size?: number
@@ -81,6 +89,7 @@ export type SoldierFormData = {
   firstName: string
   lastName: string
   gender: string
+  idNumber: string
   email: string
   phone: string
   whatsappPhone: string
@@ -98,6 +107,7 @@ export type SoldierFormData = {
   dietaryDetails: string
   // Step 4 — Reference & Verification
   referenceName: string
+  referenceCountryCode: string
   referencePhone: string
   referenceRelationship: string
   referenceAgreed: boolean
@@ -106,6 +116,7 @@ export type SoldierFormData = {
 
 export type FamilyFormData = {
   contactName: string
+  idNumber: string
   email: string
   phone: string
   city: string

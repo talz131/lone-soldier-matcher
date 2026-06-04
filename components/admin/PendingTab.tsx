@@ -218,16 +218,29 @@ export default function PendingTab({ onMatchCreated }: Props) {
                           <div className="grid grid-cols-2 gap-3 text-sm">
                             <Detail label="Email" value={s.email} />
                             <Detail label="Phone" value={s.phone} />
+                            {s.whatsapp_phone && <Detail label="WhatsApp" value={s.whatsapp_phone} />}
+                            <Detail label="Gender" value={s.gender} />
+                            <Detail label="ID Number" value={s.id_number} />
                             <Detail label="Date of Birth" value={s.date_of_birth} />
                             <Detail label="Country" value={s.country_of_origin} />
-                            <Detail label="Base" value={s.base_location} />
+                            <Detail label="Unit / Role" value={s.unit} />
                             <Detail label="Leave Frequency" value={s.service_type} />
                             <Detail label="Hebrew Level" value={s.hebrew_level} />
                             <Detail label="Languages" value={s.languages?.join(', ')} />
                             <Detail label="Observance Pref." value={s.religious_observance} />
-                            <Detail label="Pets OK?" value={s.pets_ok ? 'Yes' : 'No'} />
+                            <Detail label="Family Vibe" value={s.family_vibe?.join(', ')} />
+                            <Detail label="Preferred Location" value={s.base_location} />
+                            <Detail label="Pets OK?" value={s.pets_ok != null ? (s.pets_ok ? 'Yes' : 'No') : undefined} />
                             <Detail label="Dietary Restrictions" value={s.has_dietary_restrictions ? s.dietary_details || 'Yes' : 'None'} />
                           </div>
+                          {(s.reference_name || s.reference_phone || s.additional_notes) && (
+                            <div className="border-t border-[#e8e0d4] pt-3 grid grid-cols-2 gap-3 text-sm">
+                              <Detail label="Reference Name" value={s.reference_name} />
+                              <Detail label="Reference Phone" value={s.reference_phone} />
+                              <Detail label="Reference Relationship" value={s.reference_relationship} />
+                              {s.additional_notes && <div className="col-span-2"><Detail label="Additional Notes" value={s.additional_notes} /></div>}
+                            </div>
+                          )}
                           {/* Portal link */}
                           <div className="mt-1 rounded-xl border border-[#e8e0d4] bg-white p-3">
                             <p className="text-xs font-semibold text-[#555] mb-2">🔗 Soldier Portal Link</p>

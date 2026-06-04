@@ -22,6 +22,8 @@ export default function Step1Contact({ data, onChange, onNext }: Props) {
   const validate = () => {
     const e: Record<string, string> = {}
     if (!data.contactName.trim()) e.contactName = 'Required'
+    if (!data.idNumber.trim()) e.idNumber = 'Required'
+    else if (!/^\d+$/.test(data.idNumber)) e.idNumber = 'Numbers only'
     if (!data.email.trim()) e.email = 'Required'
     else if (!/\S+@\S+\.\S+/.test(data.email)) e.email = 'Enter a valid email'
     if (!data.phone.trim()) e.phone = 'Required'
@@ -39,6 +41,12 @@ export default function Step1Contact({ data, onChange, onNext }: Props) {
         <label className="block text-sm font-medium text-[#555] mb-1.5">Full Name *</label>
         <input type="text" value={data.contactName} onChange={e => onChange({ contactName: e.target.value })} className={inp(errors.contactName)} />
         {errors.contactName && <p className="text-red-500 text-xs mt-1">{errors.contactName}</p>}
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-[#555] mb-1.5">ID Number (Teudat Zehut or Passport) *</label>
+        <input type="text" inputMode="numeric" value={data.idNumber} onChange={e => { onChange({ idNumber: e.target.value.replace(/\D/g, '') }); setErrors(prev => ({ ...prev, idNumber: '' })) }} className={inp(errors.idNumber)} />
+        {errors.idNumber && <p className="text-red-500 text-xs mt-1">{errors.idNumber}</p>}
       </div>
 
       <div className="mb-4">

@@ -24,6 +24,8 @@ export default function Step1Personal({ data, onChange, onNext }: Props) {
     if (!data.firstName.trim()) e.firstName = 'Required'
     if (!data.lastName.trim()) e.lastName = 'Required'
     if (!data.gender) e.gender = 'Required'
+    if (!data.idNumber.trim()) e.idNumber = 'Required'
+    else if (!/^\d+$/.test(data.idNumber)) e.idNumber = 'Numbers only'
     if (!data.email.trim()) e.email = 'Required'
     else if (!/\S+@\S+\.\S+/.test(data.email)) e.email = 'Enter a valid email'
     if (!data.phone.trim()) e.phone = 'Required'
@@ -49,6 +51,12 @@ export default function Step1Personal({ data, onChange, onNext }: Props) {
           <input type="text" value={data.lastName} onChange={e => onChange({ lastName: e.target.value })} className={inp(errors.lastName)} />
           {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
         </div>
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-[#555] mb-1.5">ID Number (Teudat Zehut or Passport) *</label>
+        <input type="text" inputMode="numeric" value={data.idNumber} onChange={e => { onChange({ idNumber: e.target.value.replace(/\D/g, '') }); setErrors(prev => ({ ...prev, idNumber: '' })) }} className={inp(errors.idNumber)} />
+        {errors.idNumber && <p className="text-red-500 text-xs mt-1">{errors.idNumber}</p>}
       </div>
 
       <div className="mb-4">

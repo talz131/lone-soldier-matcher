@@ -43,6 +43,7 @@ function hasMeaningfulProgress(draft: Draft): boolean {
 
 const DEFAULT: FamilyFormData = {
   contactName: '',
+  idNumber: '',
   email: '',
   phone: '',
   city: '',
@@ -128,6 +129,7 @@ export default function FamilyOnboarding() {
 
       const { error: dbError } = await supabase.from('host_families').insert({
         contact_name: data.contactName,
+        id_number: data.idNumber || null,
         email: data.email,
         phone: data.phone || null,
         city: data.city || null,

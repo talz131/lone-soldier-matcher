@@ -33,12 +33,19 @@ export default function PortalFlagForm({ soldierId }: { soldierId: string }) {
 
   if (!open) {
     return (
-      <button
-        onClick={() => setOpen(true)}
-        className="text-xs text-[#aaa] hover:text-[#888] transition-colors underline-offset-2 hover:underline"
-      >
-        Something doesn&apos;t feel right
-      </button>
+      <div className="w-full text-center">
+        <p className="text-xs text-[#888] leading-relaxed mb-3 px-2">
+          This is a private and confidential space. You can flag anything that didn&apos;t feel right
+          — a visit, a comment, a situation. Your flag goes directly to the coordinator and is never
+          shared with the family.
+        </p>
+        <button
+          onClick={() => setOpen(true)}
+          className="text-xs text-[#aaa] hover:text-[#888] transition-colors underline-offset-2 hover:underline"
+        >
+          Something doesn&apos;t feel right
+        </button>
+      </div>
     )
   }
 

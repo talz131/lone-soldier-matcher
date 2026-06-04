@@ -20,16 +20,29 @@ const inp = (err?: string) =>
 export default function Step4Verification({ data, onChange, onSubmit, onBack, loading, error }: Props) {
   const [errors, setErrors] = useState<Record<string, string>>({})
 
-  const isValidPhone = (v: string) => /^05\d{8}$/.test(v)
-
   const validate = () => {
     const e: Record<string, string> = {}
     if (!data.referenceName.trim())  e.referenceName  = 'Required'
     if (!data.referencePhone.trim()) e.referencePhone = 'Required'
-    else if (!isValidPhone(data.referencePhone)) e.referencePhone = 'Please enter a valid Israeli mobile number starting with 05'
+    else if (data.referencePhone.replace(/\D/g, '').length < 6) e.referencePhone = 'Enter a valid phone number'
     setErrors(e)
     return Object.keys(e).length === 0
   }
+
+  const COUNTRY_CODES = [
+    { code: '+972', label: '🇮🇱 +972' },
+    { code: '+1',   label: '🇺🇸 +1' },
+    { code: '+44',  label: '🇬🇧 +44' },
+    { code: '+33',  label: '🇫🇷 +33' },
+    { code: '+7',   label: '🇷🇺 +7' },
+    { code: '+61',  label: '🇦🇺 +61' },
+    { code: '+27',  label: '🇿🇦 +27' },
+    { code: '+54',  label: '🇦🇷 +54' },
+    { code: '+55',  label: '🇧🇷 +55' },
+    { code: '+49',  label: '🇩🇪 +49' },
+    { code: '+34',  label: '🇪🇸 +34' },
+    { code: '+39',  label: '🇮🇹 +39' },
+  ]
 
   return (
     <div>
@@ -57,13 +70,23 @@ export default function Step4Verification({ data, onChange, onSubmit, onBack, lo
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-[#555] mb-1.5">Reference Phone Number *</label>
-        <input
-          type="tel"
-          value={data.referencePhone}
-          onChange={e => { onChange({ referencePhone: e.target.value.replace(/\D/g, '') }); setErrors(prev => ({ ...prev, referencePhone: '' })) }}
-          className={inp(errors.referencePhone)}
-          maxLength={10}
-        />
+        <div className="flex gap-2">
+          <select
+            value={data.referenceCountryCode}
+            onChange={e => onChange({ referenceCountryCode: e.target.value })}
+            className="border border-[#d4c9b8] rounded-xl px-2 py-2.5 bg-white text-[#0B2818] text-sm focus:outline-none focus:ring-2 focus:ring-[#1D9E75] focus:border-transparent transition shrink-0"
+          >
+            {COUNTRY_CODES.map(c => (
+              <option key={c.code} value={c.code}>{c.label}</option>
+            ))}
+          </select>
+          <input
+            type="tel"
+            value={data.referencePhone}
+            onChange={e => { onChange({ referencePhone: e.target.value.replace(/\D/g, '') }); setErrors(prev => ({ ...prev, referencePhone: '' })) }}
+            className={`flex-1 ${inp(errors.referencePhone)}`}
+          />
+        </div>
         {errors.referencePhone && <p className="text-red-500 text-xs mt-1">{errors.referencePhone}</p>}
       </div>
 

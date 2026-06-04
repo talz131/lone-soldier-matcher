@@ -66,15 +66,23 @@ export default function Step3Preferences({ data, onChange, onNext, onBack }: Pro
           Family vibe <span className="text-[#888] font-normal">(choose all that appeal to you)</span>
         </label>
         <div className="grid grid-cols-2 gap-2">
-          {VIBES.map(opt => (
-            <button key={opt.value} type="button" onClick={() => onChange({ familyVibe: toggleItem(data.familyVibe, opt.value) })}
-              className={`py-2.5 px-4 rounded-xl border text-sm font-medium transition-all text-left ${
-                data.familyVibe.includes(opt.value)
-                  ? 'bg-[#e6f7f1] border-[#1D9E75] text-[#0F3D2E]'
-                  : 'border-[#d4c9b8] text-[#555] hover:border-[#1D9E75]'
-              }`}
-            >{opt.label}</button>
-          ))}
+          {VIBES.map(opt => {
+            const selected = data.familyVibe.includes(opt.value)
+            return (
+              <button key={opt.value} type="button" onClick={() => onChange({ familyVibe: toggleItem(data.familyVibe, opt.value) })}
+                className={`py-2.5 px-3 rounded-xl border text-sm font-medium transition-all text-left flex items-center gap-2 ${
+                  selected
+                    ? 'bg-[#e6f7f1] border-[#1D9E75] text-[#0F3D2E]'
+                    : 'border-[#d4c9b8] text-[#555] hover:border-[#1D9E75]'
+                }`}
+              >
+                <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-all ${selected ? 'bg-[#1D9E75] border-[#1D9E75]' : 'border-[#d4c9b8]'}`}>
+                  {selected && <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>}
+                </span>
+                {opt.label}
+              </button>
+            )
+          })}
         </div>
       </div>
 
