@@ -95,9 +95,11 @@ export default function Step4Reference({ data, onChange, onSubmit, onBack, loadi
       }`}>
         <input type="checkbox" checked={data.acknowledgedTerms} onChange={e => { onChange({ acknowledgedTerms: e.target.checked }); setErrors(prev => ({ ...prev, acknowledgedTerms: '' })) }} className="w-4 h-4 mt-0.5 accent-[#534AB7]" />
         <span className="text-sm text-[#555] leading-relaxed">
-          I understand that this is a voluntary matching service. The program coordinator will review
-          our application before making any match. I confirm that the information I have provided is
-          accurate and that we are opening our home voluntarily.
+          We acknowledge that this is a voluntary matching service. This program makes no guarantees
+          regarding matched soldiers. By submitting this registration, we confirm that all information
+          provided is truthful and accurate. We understand that hosting is entirely voluntary and we
+          may withdraw at any time by contacting the coordinator. We consent to our family&apos;s
+          details being shared with matched soldiers solely for the purpose of this program.
         </span>
       </label>
       {errors.acknowledgedTerms && <p className="text-red-500 text-xs mb-6">{errors.acknowledgedTerms}</p>}

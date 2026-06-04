@@ -139,9 +139,11 @@ export default function Step4Verification({ data, onChange, onSubmit, onBack, lo
       }`}>
         <input type="checkbox" checked={data.acknowledgedTerms} onChange={e => { onChange({ acknowledgedTerms: e.target.checked }); setErrors(prev => ({ ...prev, acknowledgedTerms: '' })) }} className="w-4 h-4 mt-0.5 accent-[#1D9E75]" />
         <span className="text-sm text-[#555] leading-relaxed">
-          I understand that this is a voluntary matching service. The program coordinator will review
-          my application and I may be contacted for further information. I confirm that the information
-          I have provided is accurate.
+          I acknowledge that this is a voluntary matching service. This program makes no guarantees
+          regarding the suitability or availability of host families. By submitting this application,
+          I confirm that all information provided is truthful and accurate, and I understand that false
+          information may result in removal. I consent to my details being shared with matched host
+          families solely for the purpose of this program.
         </span>
       </label>
       {errors.acknowledgedTerms && <p className="text-red-500 text-xs mb-6">{errors.acknowledgedTerms}</p>}
