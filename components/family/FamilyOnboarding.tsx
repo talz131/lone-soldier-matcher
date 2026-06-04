@@ -167,7 +167,7 @@ export default function FamilyOnboarding() {
           </svg>
         </div>
         <h3 className="font-serif text-2xl text-[#0B2818] mb-3">Application received!</h3>
-        <p className="text-[#555] max-w-sm mx-auto leading-relaxed">
+        <p className="text-[#555] leading-relaxed">
           Thank you for opening your heart and home. We&apos;ll review your application and be in
           touch soon. Your generosity means the world to these soldiers.
         </p>

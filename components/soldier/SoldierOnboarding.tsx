@@ -187,7 +187,7 @@ export default function SoldierOnboarding() {
           </svg>
         </div>
         <h3 className="font-serif text-2xl text-[#0B2818] mb-3">Application received!</h3>
-        <p className="text-[#555] max-w-sm mx-auto leading-relaxed">
+        <p className="text-[#555] leading-relaxed">
           Thank you for registering. Our team will review your application and reach out within
           3–5 business days. You&apos;re not alone — we&apos;ve got you.
         </p>
