@@ -64,6 +64,7 @@ const DEFAULT: FamilyFormData = {
   referencePhone: '',
   referenceRelationship: '',
   agreedToTerms: false,
+  acknowledgedTerms: false,
 }
 
 const STEPS = ['Contact Info', 'Household', 'Offerings', 'Reference']

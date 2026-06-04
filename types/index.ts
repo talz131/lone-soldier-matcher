@@ -114,6 +114,7 @@ export type SoldierFormData = {
   referenceRelationship: string
   referenceAgreed: boolean
   additionalNotes: string
+  acknowledgedTerms: boolean
 }
 
 export type FamilyFormData = {
@@ -139,4 +140,5 @@ export type FamilyFormData = {
   referencePhone: string
   referenceRelationship: string
   agreedToTerms: boolean
+  acknowledgedTerms: boolean
 }

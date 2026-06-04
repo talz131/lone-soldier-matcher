@@ -28,6 +28,7 @@ export default function Step4Reference({ data, onChange, onSubmit, onBack, loadi
     if (!data.referencePhone.trim()) e.referencePhone = 'Required'
     else if (!isValidPhone(data.referencePhone)) e.referencePhone = 'Please enter a valid Israeli mobile number starting with 05'
     if (!data.agreedToTerms) e.terms = 'Please agree to continue'
+    if (!data.acknowledgedTerms) e.acknowledgedTerms = 'Please confirm before submitting'
     setErrors(e)
     return Object.keys(e).length === 0
   }
@@ -69,6 +70,18 @@ export default function Step4Reference({ data, onChange, onSubmit, onBack, loadi
         </span>
       </label>
       {errors.terms && <p className="text-red-500 text-xs -mt-6 mb-6">{errors.terms}</p>}
+
+      <label className={`flex items-start gap-3 p-4 rounded-xl border cursor-pointer mb-2 transition-colors ${
+        errors.acknowledgedTerms ? 'border-red-400 bg-red-50' : data.acknowledgedTerms ? 'border-[#534AB7] bg-[#eeedf8]' : 'border-[#d4c9b8]'
+      }`}>
+        <input type="checkbox" checked={data.acknowledgedTerms} onChange={e => { onChange({ acknowledgedTerms: e.target.checked }); setErrors(prev => ({ ...prev, acknowledgedTerms: '' })) }} className="w-4 h-4 mt-0.5 accent-[#534AB7]" />
+        <span className="text-sm text-[#555] leading-relaxed">
+          I understand that this is a voluntary matching service. The program coordinator will review
+          our application before making any match. I confirm that the information I have provided is
+          accurate and that we are opening our home voluntarily.
+        </span>
+      </label>
+      {errors.acknowledgedTerms && <p className="text-red-500 text-xs mb-6">{errors.acknowledgedTerms}</p>}
 
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-sm text-red-600">{error}</div>

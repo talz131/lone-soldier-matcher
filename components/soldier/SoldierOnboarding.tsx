@@ -66,6 +66,7 @@ const DEFAULT: SoldierFormData = {
   referenceRelationship: '',
   referenceAgreed: false,
   additionalNotes: '',
+  acknowledgedTerms: false,
 }
 
 const STEPS = ['Personal Info', 'Situation', 'Preferences', 'Verification']
