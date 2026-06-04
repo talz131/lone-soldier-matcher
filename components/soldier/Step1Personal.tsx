@@ -19,6 +19,21 @@ export default function Step1Personal({ data, onChange, onNext }: Props) {
 
   const isValidPhone = (v: string) => /^05\d{8}$/.test(v)
 
+  const COUNTRY_CODES = [
+    { code: '+972', label: '🇮🇱 +972' },
+    { code: '+1',   label: '🇺🇸 +1' },
+    { code: '+44',  label: '🇬🇧 +44' },
+    { code: '+33',  label: '🇫🇷 +33' },
+    { code: '+7',   label: '🇷🇺 +7' },
+    { code: '+61',  label: '🇦🇺 +61' },
+    { code: '+27',  label: '🇿🇦 +27' },
+    { code: '+54',  label: '🇦🇷 +54' },
+    { code: '+55',  label: '🇧🇷 +55' },
+    { code: '+49',  label: '🇩🇪 +49' },
+    { code: '+34',  label: '🇪🇸 +34' },
+    { code: '+39',  label: '🇮🇹 +39' },
+  ]
+
   const validate = () => {
     const e: Record<string, string> = {}
     if (!data.firstName.trim()) e.firstName = 'Required'
@@ -30,7 +45,7 @@ export default function Step1Personal({ data, onChange, onNext }: Props) {
     else if (!/\S+@\S+\.\S+/.test(data.email)) e.email = 'Enter a valid email'
     if (!data.phone.trim()) e.phone = 'Required'
     else if (!isValidPhone(data.phone)) e.phone = 'Please enter a valid Israeli mobile number starting with 05'
-    if (data.whatsappPhone.trim() && !isValidPhone(data.whatsappPhone)) e.whatsappPhone = 'Please enter a valid Israeli mobile number starting with 05'
+    if (data.whatsappPhone.trim() && data.whatsappPhone.replace(/\D/g, '').length < 6) e.whatsappPhone = 'Enter a valid phone number'
     setErrors(e)
     return Object.keys(e).length === 0
   }
@@ -76,7 +91,13 @@ export default function Step1Personal({ data, onChange, onNext }: Props) {
           WhatsApp Number
           <span className="ml-1 font-normal text-[#888]">(if different)</span>
         </label>
-        <input type="tel" value={data.whatsappPhone} onChange={e => { onChange({ whatsappPhone: e.target.value.replace(/\D/g, '') }); setErrors(prev => ({ ...prev, whatsappPhone: '' })) }} className={inp(errors.whatsappPhone)} maxLength={10} />
+        <div className="flex gap-2">
+          <select value={data.whatsappCountryCode} onChange={e => onChange({ whatsappCountryCode: e.target.value })}
+            className="border border-[#d4c9b8] rounded-xl px-2 py-2.5 bg-white text-[#0B2818] text-sm focus:outline-none focus:ring-2 focus:ring-[#1D9E75] focus:border-transparent transition shrink-0">
+            {COUNTRY_CODES.map(c => <option key={c.code} value={c.code}>{c.label}</option>)}
+          </select>
+          <input type="tel" value={data.whatsappPhone} onChange={e => { onChange({ whatsappPhone: e.target.value.replace(/\D/g, '') }); setErrors(prev => ({ ...prev, whatsappPhone: '' })) }} className={`flex-1 ${inp(errors.whatsappPhone)}`} />
+        </div>
         {errors.whatsappPhone && <p className="text-red-500 text-xs mt-1">{errors.whatsappPhone}</p>}
       </div>
 

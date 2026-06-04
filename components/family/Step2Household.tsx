@@ -52,9 +52,6 @@ export default function Step2Household({ data, onChange, onNext, onBack }: Props
             >{opt.label}</button>
           ))}
         </div>
-        {data.hasChildren && (
-          <input type="text" value={data.childrenAges} onChange={e => onChange({ childrenAges: e.target.value })} className={inp} placeholder="" />
-        )}
       </div>
 
       <div className="mb-6">

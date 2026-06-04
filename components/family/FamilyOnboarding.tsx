@@ -61,6 +61,7 @@ const DEFAULT: FamilyFormData = {
   pets: '',
   additionalNotes: '',
   referenceName: '',
+  referenceCountryCode: '+972',
   referencePhone: '',
   referenceRelationship: '',
   agreedToTerms: false,
@@ -148,7 +149,7 @@ export default function FamilyOnboarding() {
         pets: data.pets || null,
         additional_notes: data.additionalNotes || null,
         reference_name: data.referenceName || null,
-        reference_phone: data.referencePhone || null,
+        reference_phone: data.referencePhone ? `${data.referenceCountryCode}${data.referencePhone}` : null,
         reference_relationship: data.referenceRelationship || null,
       })
 

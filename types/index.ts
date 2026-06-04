@@ -94,6 +94,7 @@ export type SoldierFormData = {
   idNumber: string
   email: string
   phone: string
+  whatsappCountryCode: string
   whatsappPhone: string
   dateOfBirth: string
   countryOfOrigin: string
@@ -137,6 +138,7 @@ export type FamilyFormData = {
   additionalNotes: string
   soldierGenderPreference: string
   referenceName: string
+  referenceCountryCode: string
   referencePhone: string
   referenceRelationship: string
   agreedToTerms: boolean
