@@ -127,8 +127,35 @@ export default function Home() {
               </Link>
             </div>{/* end home-cards */}
 
-            {/* 5 — Admin link */}
-            <div className="text-center" style={fadeUp(5, visible)}>
+            {/* 5 — How it works */}
+            <div className="mb-4" style={fadeUp(5, visible)}>
+              <p className="text-center text-[10px] font-semibold uppercase tracking-widest text-[#0B2818] opacity-40 mb-3">
+                How it works
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-1">
+                {[
+                  { num: '1', title: 'Apply', desc: 'Soldiers and host families submit a short application' },
+                  { num: '2', title: 'We review', desc: 'Our coordinator carefully reviews every application' },
+                  { num: '3', title: 'We match', desc: 'We personally introduce you to your match' },
+                ].map((step) => (
+                  <div key={step.num} className="flex flex-row sm:flex-col items-start sm:items-center gap-3 sm:gap-2 px-3 py-2 sm:text-center">
+                    <div
+                      className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0"
+                      style={{ backgroundColor: '#EF9F27' }}
+                    >
+                      {step.num}
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold text-[#0B2818]">{step.title}</p>
+                      <p className="text-xs text-[#888] leading-snug mt-0.5">{step.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 6 — Admin link */}
+            <div className="text-center" style={fadeUp(6, visible)}>
               <Link href="/admin/login" className="text-xs text-[#888] hover:text-[#555] transition-colors">
                 Admin
               </Link>
